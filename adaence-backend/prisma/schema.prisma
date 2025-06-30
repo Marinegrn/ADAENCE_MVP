@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  nom       String?
+  prenom    String?
+  age       Int?
+  ville     String?
+  quartier  String?
+  telephone String?
+  typeUser  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ✅ Juste le nom de la relation ici, sans @relation
+  aine     Aine?
+  benevole Benevole?
+}
+
+model Aine {
+  id             Int      @id @default(autoincrement())
+  userId         Int      @unique
+  user           User     @relation(fields: [userId], references: [id]) // ✅ Relation définie ici seulement
+  bio            String
+  centresInteret String[]
+  mobilite       String
+  besoinAide     String
+}
+
+model Benevole {
+  id             Int      @id @default(autoincrement())
+  userId         Int      @unique
+  user           User     @relation(fields: [userId], references: [id]) // ✅ Relation définie ici seulement
+  bio            String
+  experiences    String
+  disponibilites String[]
+  competences    String[]
+}
+
+model Activite {
+  id          Int      @id @default(autoincrement())
+  nom         String
+  description String
+  duree       Int
+  lieuType    String
+}
