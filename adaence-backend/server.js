@@ -26,12 +26,12 @@ app.use(rateLimit({
 }));
 
 // Routes
-const userRoutes = require('./src/routes/user.routes');
-const seniorRoutes = require('./src/routes/senior.routes');
-const activityRoutes = require('./src/routes/activity.routes');
-const slotRoutes = require('./src/routes/slot.routes');
-const bookingRoutes = require('./src/routes/booking.routes');
-const applicationRoutes = require('./src/routes/application.routes');
+const userRoutes = require('./src/routes/users');
+const seniorRoutes = require('./src/routes/seniors');
+const activityRoutes = require('./src/routes/activities');
+const slotRoutes = require('./src/routes/slots');
+const bookingRoutes = require('./src/routes/bookings');
+const applicationRoutes = require('./src/routes/applications');
 
 app.use('/api/users', userRoutes);
 app.use('/api/seniors', seniorRoutes);
