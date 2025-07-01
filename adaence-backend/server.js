@@ -34,4 +34,7 @@ app.get('/', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`);
+}).on('error', (err) => {
+  console.error('Erreur lors du démarrage du serveur:', err.message);
+  process.exit(1);
 });
