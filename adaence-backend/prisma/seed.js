@@ -1,24 +1,19 @@
 // DATA TEST
 const { PrismaClient } = require('../src/generated/prisma');
-const { v4: uuidv4 } = require('uuid');
-const bcrypt = require('bcryptjs');
-
 const prisma = new PrismaClient();
+const { v4: uuidv4 } = require('uuid');
+const bcrypt = require('bcrypt');
 
 async function main() {
-  console.log('🌱 Démarrage du seed...');
+  console.log('🚀 Démarrage du seed...');
 
-  const hashedPassword = await bcrypt.hash('password123', 10);
-
-  // USERS (rôles VISITOR remplacés par bénévoles => ici on ne crée que SENIOR et VISITOR/ADMIN)
   const usersData = [
-    // SENIORS
     {
       id: uuidv4(),
       email: 'robert.aine@paris.fr',
-      password: hashedPassword,
+      password: 'password123',
       firstName: 'Robert',
-      lastName: 'Dupont',
+      lastName: 'Ainé',
       phone: '+33123456789',
       role: 'SENIOR',
       createdAt: new Date(),
@@ -27,10 +22,10 @@ async function main() {
     {
       id: uuidv4(),
       email: 'marie.aine@martinique.fr',
-      password: hashedPassword,
+      password: 'password123',
       firstName: 'Marie',
-      lastName: 'Petit',
-      phone: '+596696969696',
+      lastName: 'Ainé',
+      phone: '+59698765432',
       role: 'SENIOR',
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -38,72 +33,64 @@ async function main() {
     {
       id: uuidv4(),
       email: 'jean.aine@reunion.fr',
-      password: hashedPassword,
+      password: 'password123',
       firstName: 'Jean',
-      lastName: 'Morel',
-      phone: '+262696969696',
+      lastName: 'Ainé',
+      phone: '+26212345678',
       role: 'SENIOR',
       createdAt: new Date(),
       updatedAt: new Date(),
     },
-    // ADMIN
-    {
-      id: uuidv4(),
-      email: 'admin@adaence.fr',
-      password: hashedPassword,
-      firstName: 'Admin',
-      lastName: 'Adaence',
-      phone: '+33100000000',
-      role: 'ADMIN',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    // BÉNÉVOLES (en tant qu'utilisateurs VISITOR dans la table users)
     {
       id: uuidv4(),
       email: 'marie.benevole@guadeloupe.fr',
-      password: hashedPassword,
+      password: 'password123',
       firstName: 'Marie',
-      lastName: 'Lemoine',
+      lastName: 'Bénévole',
       phone: '+590690123456',
-      role: 'VISITOR',  // on garde VISITOR, car bénévole est géré dans volunteer_applications
+      role: 'VISITOR',
       createdAt: new Date(),
       updatedAt: new Date(),
     },
     {
       id: uuidv4(),
       email: 'sophie.benevole@mayotte.fr',
-      password: hashedPassword,
+      password: 'password123',
       firstName: 'Sophie',
-      lastName: 'Ali',
-      phone: '+262639123456',
-      role: 'VISITOR',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      email: 'lucas.martin@paris.fr',
-      password: hashedPassword,
-      firstName: 'Lucas',
-      lastName: 'Martin',
-      phone: '+33101567890',
+      lastName: 'Bénévole',
+      phone: '+26263987654',
       role: 'VISITOR',
       createdAt: new Date(),
       updatedAt: new Date(),
     },
   ];
 
-  // Insertion des utilisateurs
+  // Hash des mots de passe et insertion des users
   for (const user of usersData) {
-    await prisma.users.create({ data: user });
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    await prisma.user.create({
+      data: {
+        ...user,
+        password: hashedPassword,
+      },
+    });
+  }
+
+  // Récupère à nouveau tous les users pour récupérer leurs IDs (au cas où)
+  const users = await prisma.user.findMany();
+
+  // Construire un helper pour retrouver un user par email
+  function getUserIdByEmail(email) {
+    const user = users.find(u => u.email === email);
+    if (!user) throw new Error(`Utilisateur introuvable avec l'email: ${email}`);
+    return user.id;
   }
 
   // PROFILS SENIORS
   const seniorProfilesData = [
     {
       id: uuidv4(),
-      userId: usersData.find(u => u.email === 'robert.aine@paris.fr').id,
+      userId: getUserIdByEmail('robert.aine@paris.fr'),
       age: 78,
       bio: "Ancien professeur d'histoire passionné par la culture et la lecture.",
       location: "Paris, Île-de-France",
@@ -114,7 +101,7 @@ async function main() {
     },
     {
       id: uuidv4(),
-      userId: usersData.find(u => u.email === 'marie.aine@martinique.fr').id,
+      userId: getUserIdByEmail('marie.aine@martinique.fr'),
       age: 82,
       bio: "Aime la musique créole et les promenades en bord de mer.",
       location: "Fort-de-France, Martinique",
@@ -125,7 +112,7 @@ async function main() {
     },
     {
       id: uuidv4(),
-      userId: usersData.find(u => u.email === 'jean.aine@reunion.fr').id,
+      userId: getUserIdByEmail('jean.aine@reunion.fr'),
       age: 75,
       bio: "Ancien ingénieur, passionné de jardinage et randonnée.",
       location: "Saint-Denis, La Réunion",
@@ -137,7 +124,7 @@ async function main() {
   ];
 
   for (const profile of seniorProfilesData) {
-    await prisma.senior_profiles.create({ data: profile });
+    await prisma.seniorProfile.create({ data: profile });
   }
 
   // ACTIVITIES
@@ -173,14 +160,18 @@ async function main() {
   ];
 
   for (const activity of activitiesData) {
-    await prisma.activities.create({ data: activity });
+    await prisma.activity.create({ data: activity });
   }
+
+  // Récupérer les profils seniors et activités insérés
+  const seniors = await prisma.seniorProfile.findMany();
+  const activities = await prisma.activity.findMany();
 
   // AVAILABLE SLOTS (créneaux seniors disponibles pour activités)
   const availableSlotsData = [
     {
       id: uuidv4(),
-      seniorId: seniorProfilesData[0].id,
+      seniorId: seniors.find(s => s.userId === getUserIdByEmail('robert.aine@paris.fr')).id,
       date: new Date('2025-07-10'),
       startTime: '09:00',
       endTime: '11:00',
@@ -190,7 +181,7 @@ async function main() {
     },
     {
       id: uuidv4(),
-      seniorId: seniorProfilesData[1].id,
+      seniorId: seniors.find(s => s.userId === getUserIdByEmail('marie.aine@martinique.fr')).id,
       date: new Date('2025-07-11'),
       startTime: '14:00',
       endTime: '16:00',
@@ -200,7 +191,7 @@ async function main() {
     },
     {
       id: uuidv4(),
-      seniorId: seniorProfilesData[2].id,
+      seniorId: seniors.find(s => s.userId === getUserIdByEmail('jean.aine@reunion.fr')).id,
       date: new Date('2025-07-12'),
       startTime: '10:00',
       endTime: '12:00',
@@ -211,16 +202,19 @@ async function main() {
   ];
 
   for (const slot of availableSlotsData) {
-    await prisma.available_slots.create({ data: slot });
+    await prisma.availableSlot.create({ data: slot });
   }
+
+  // Récupérer les créneaux disponibles
+  const slots = await prisma.availableSlot.findMany();
 
   // BOOKINGS (réservations par bénévoles — visitorId = bénévole, seniorId, slotId)
   const bookingsData = [
     {
       id: uuidv4(),
-      visitorId: usersData.find(u => u.email === 'marie.benevole@guadeloupe.fr').id,
-      seniorId: seniorProfilesData[0].id,
-      slotId: availableSlotsData[0].id,
+      visitorId: getUserIdByEmail('marie.benevole@guadeloupe.fr'),
+      seniorId: seniors.find(s => s.userId === getUserIdByEmail('robert.aine@paris.fr')).id,
+      slotId: slots[0].id,
       message: 'Hâte de partager un moment convivial !',
       status: 'CONFIRMED',
       createdAt: new Date(),
@@ -228,9 +222,9 @@ async function main() {
     },
     {
       id: uuidv4(),
-      visitorId: usersData.find(u => u.email === 'sophie.benevole@mayotte.fr').id,
-      seniorId: seniorProfilesData[1].id,
-      slotId: availableSlotsData[1].id,
+      visitorId: getUserIdByEmail('sophie.benevole@mayotte.fr'),
+      seniorId: seniors.find(s => s.userId === getUserIdByEmail('marie.aine@martinique.fr')).id,
+      slotId: slots[1].id,
       message: 'Promenade au parc, ça va être top !',
       status: 'PENDING',
       createdAt: new Date(),
@@ -239,7 +233,7 @@ async function main() {
   ];
 
   for (const booking of bookingsData) {
-    await prisma.bookings.create({ data: booking });
+    await prisma.booking.create({ data: booking });
   }
 
   // VOLUNTEER APPLICATIONS (candidatures bénévoles - séparées des users)
@@ -275,7 +269,7 @@ async function main() {
   ];
 
   for (const app of volunteerApplicationsData) {
-    await prisma.volunteer_applications.create({ data: app });
+    await prisma.volunteerApplication.create({ data: app });
   }
 
   console.log('✅ Seed terminé avec succès !');

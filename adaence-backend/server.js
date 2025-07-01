@@ -25,6 +25,21 @@ app.use(rateLimit({
   max: 100, // limite chaque IP à 100 requêtes
 }));
 
+// Routes
+const userRoutes = require('./src/routes/user.routes');
+const seniorRoutes = require('./src/routes/senior.routes');
+const activityRoutes = require('./src/routes/activity.routes');
+const slotRoutes = require('./src/routes/slot.routes');
+const bookingRoutes = require('./src/routes/booking.routes');
+const applicationRoutes = require('./src/routes/application.routes');
+
+app.use('/api/users', userRoutes);
+app.use('/api/seniors', seniorRoutes);
+app.use('/api/activities', activityRoutes);
+app.use('/api/slots', slotRoutes);
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/applications', applicationRoutes);
+
 app.get('/', (req, res) => {
   res.send('Bienvenue sur Adaence backend !');
 });
