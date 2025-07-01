@@ -1,5 +1,5 @@
 // DATA TEST
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require('../src/generated/prisma');
 const bcrypt = require('bcryptjs');
 
 const prisma = new PrismaClient();
