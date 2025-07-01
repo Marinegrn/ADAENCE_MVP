@@ -4,14 +4,16 @@ const prisma = require('../prisma/client');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const activities = await prisma.activity.findMany();
-  res.json(activities);
+  const slots = await prisma.availableSlot.findMany({
+    include: { senior: true },
+  });
+  res.json(slots);
 });
 
 router.post('/', async (req, res) => {
   const data = req.body;
-  const newActivity = await prisma.activity.create({ data });
-  res.status(201).json(newActivity);
+  const newSlot = await prisma.availableSlot.create({ data });
+  res.status(201).json(newSlot);
 });
 
 module.exports = router;

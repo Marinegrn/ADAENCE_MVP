@@ -16,7 +16,13 @@ const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(helmet()); // sécurise les en-têtes HTTP
-app.use(cors()); // autorise les requêtes cross-origin
+app.use(cors({
+  origin: ['http://localhost:3000'],  // frontend autorisé et autorise les requêtes cross-origin
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(morgan('dev')); // logs des requêtes
 app.use(express.json()); // parse le JSON dans les requêtes
 app.use(express.urlencoded({ extended: true })); 
