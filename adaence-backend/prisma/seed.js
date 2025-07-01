@@ -1,109 +1,90 @@
-// SEED DATA TEST 
+// DATA TEST
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 
 const prisma = new PrismaClient();
 
 async function main() {
-    console.log('🌱 Seeding de la base de données...');
+  console.log('🌱 Démarrage du seeding...');
 
-    // Créer des activités
-    const activites = await Promise.all([
-    prisma.activite.create({
+  // Créer quelques activités
+  const activities = await Promise.all([
+    prisma.activity.create({
       data: {
-        nom: 'Café et discussion',
-        description: 'Un moment convivial autour d\'un café pour échanger et apprendre à se connaître',
-        duree: 60,
-        lieuType: 'FLEXIBLE'
+        name: 'Café & discussion',
+        description: 'Moment convivial autour d’un café',
+        icon: '☕'
       }
     }),
-    prisma.activite.create({
+    prisma.activity.create({
       data: {
-        nom: 'Promenade au parc',
-        description: 'Une balade relaxante dans un parc du quartier',
-        duree: 90,
-        lieuType: 'EXTERIEUR'
-      }
-    }),
-    prisma.activite.create({
-      data: {
-        nom: 'Visite de musée',
-        description: 'Découverte culturelle d\'un musée local',
-        duree: 120,
-        lieuType: 'EXTERIEUR'
-      }
-    }),
-    prisma.activite.create({
-      data: {
-        nom: 'Jeux de société',
-        description: 'Partie de jeux de société pour s\'amuser ensemble',
-        duree: 90,
-        lieuType: 'DOMICILE'
+        name: 'Balade en plein air',
+        description: 'Promenade dans un parc du quartier',
+        icon: '🌳'
       }
     })
   ]);
 
-  // Créer des utilisateurs de test
+  // Créer un utilisateur senior avec profil
   const hashedPassword = await bcrypt.hash('password123', 10);
-
-  // Créer un bénévole
-  const benevoleUser = await prisma.user.create({
+  const seniorUser = await prisma.user.create({
     data: {
-      email: 'marie.benevole@test.com',
+      email: 'senior@example.com',
       password: hashedPassword,
-      nom: 'Martin',
-      prenom: 'Marie',
-      telephone: '0123456789',
-      typeUser: 'BENEVOLE',
-      age: 25,
-      ville: 'Paris',
-      quartier: '11ème'
+      firstName: 'Jean',
+      lastName: 'Dupont',
+      phone: '0601020304',
+      role: 'SENIOR',
+      seniorProfile: {
+        create: {
+          age: 72,
+          bio: 'Ancien enseignant passionné d’art.',
+          location: 'Paris',
+          photo: null,
+          activities: [activities[0].id, activities[1].id],
+          availableSlots: {
+            create: [
+              {
+                date: new Date(),
+                startTime: '10:00',
+                endTime: '11:00',
+                activity: activities[0].id
+              },
+              {
+                date: new Date(),
+                startTime: '14:00',
+                endTime: '15:00',
+                activity: activities[1].id
+              }
+            ]
+          }
+        }
+      }
+    },
+    include: {
+      seniorProfile: true
     }
   });
 
-  await prisma.benevole.create({
+  // Créer un utilisateur visiteur (qui réservera plus tard)
+  const visitorUser = await prisma.user.create({
     data: {
-      userId: benevoleUser.id,
-      bio: 'Étudiante en psychologie, j\'aime passer du temps avec les personnes âgées',
-      experiences: 'Bénévole en maison de retraite',
-      disponibilites: ['lundi-matin', 'mercredi-apres-midi', 'samedi-matin'],
-      competences: ['Écoute', 'Accompagnement', 'Jeux']
-    }
-  });
-
-  // Créer un aîné
-  const aineUser = await prisma.user.create({
-    data: {
-      email: 'robert.aine@test.com',
+      email: 'visitor@example.com',
       password: hashedPassword,
-      nom: 'Dupont',
-      prenom: 'Robert',
-      telephone: '0987654321',
-      typeUser: 'AINE',
-      age: 75,
-      ville: 'Paris',
-      quartier: '11ème'
+      firstName: 'Alice',
+      lastName: 'Martin',
+      role: 'VISITOR'
     }
   });
 
-  await prisma.aine.create({
-    data: {
-      userId: aineUser.id,
-      bio: 'Ancien professeur d\'histoire, j\'aime partager mes connaissances',
-      centresInteret: ['Histoire', 'Lecture', 'Musique classique', 'Échecs'],
-      mobilite: 'MOYENNE',
-      besoinAide: 'Accompagnement pour sorties culturelles'
-    }
-  });
-
-  console.log('✅ Seeding terminé avec succès!');
-  console.log('👤 Bénévole test: marie.benevole@test.com / password123');
-  console.log('👤 Aîné test: robert.aine@test.com / password123');
+  console.log('✅ Seeding terminé avec succès !');
+  console.log(`👤 Senior : ${seniorUser.email}`);
+  console.log(`👤 Visiteur : ${visitorUser.email}`);
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Erreur lors du seeding:', e);
+    console.error('❌ Erreur pendant le seeding :', e);
     process.exit(1);
   })
   .finally(async () => {

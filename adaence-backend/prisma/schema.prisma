@@ -15,48 +15,131 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   email     String   @unique
   password  String
-  nom       String?
-  prenom    String?
-  age       Int?
-  ville     String?
-  quartier  String?
-  telephone String?
-  typeUser  String?
+  firstName String
+  lastName  String
+  phone     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  // ✅ Juste le nom de la relation ici, sans @relation
-  aine     Aine?
-  benevole Benevole?
+  role      Role     @default(VISITOR)
+  
+  // Profil senior
+  seniorProfile SeniorProfile?
+  
+  // Réservations faites
+  bookings Booking[]
+  
+  @@map("users")
 }
 
-model Aine {
-  id             Int      @id @default(autoincrement())
-  userId         Int      @unique
-  user           User     @relation(fields: [userId], references: [id]) // ✅ Relation définie ici seulement
-  bio            String
-  centresInteret String[]
-  mobilite       String
-  besoinAide     String
+model SeniorProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  age         Int
+  bio         String
+  location    String
+  photo       String?
+  activities  String[] // Array of activity IDs
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Créneaux disponibles
+  availableSlots AvailableSlot[]
+  
+  // Réservations reçues
+  bookings Booking[]
+  
+  @@map("senior_profiles")
 }
 
-model Benevole {
-  id             Int      @id @default(autoincrement())
-  userId         Int      @unique
-  user           User     @relation(fields: [userId], references: [id]) // ✅ Relation définie ici seulement
-  bio            String
-  experiences    String
-  disponibilites String[]
-  competences    String[]
-}
-
-model Activite {
-  id          Int      @id @default(autoincrement())
-  nom         String
+model Activity {
+  id          String   @id @default(cuid())
+  name        String
   description String
-  duree       Int
-  lieuType    String
+  icon        String
+  createdAt   DateTime @default(now())
+  
+  @@map("activities")
+}
+
+model AvailableSlot {
+  id        String   @id @default(cuid())
+  seniorId  String
+  senior    SeniorProfile @relation(fields: [seniorId], references: [id], onDelete: Cascade)
+  
+  date      DateTime
+  startTime String
+  endTime   String
+  activity  String
+  isBooked  Boolean  @default(false)
+  
+  createdAt DateTime @default(now())
+  
+  // Réservation associée
+  booking   Booking?
+  
+  @@map("available_slots")
+}
+
+model Booking {
+  id        String   @id @default(cuid())
+  
+  visitorId String
+  visitor   User     @relation(fields: [visitorId], references: [id])
+  
+  seniorId  String
+  senior    SeniorProfile @relation(fields: [seniorId], references: [id])
+  
+  slotId    String   @unique
+  slot      AvailableSlot @relation(fields: [slotId], references: [id])
+  
+  message   String?
+  status    BookingStatus @default(PENDING)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("bookings")
+}
+
+model VolunteerApplication {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String
+  phone     String?
+  age       Int?
+  location  String
+  motivation String
+  availability String
+  experience String?
+  
+  status    ApplicationStatus @default(PENDING)
+  createdAt DateTime @default(now())
+  
+  @@map("volunteer_applications")
+}
+
+enum Role {
+  VISITOR
+  SENIOR
+  ADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
