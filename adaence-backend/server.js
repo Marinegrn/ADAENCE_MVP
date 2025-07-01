@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const { sendTestEmail } = require('./src/utils/mail');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
@@ -26,6 +27,17 @@ app.use(rateLimit({
 
 app.get('/', (req, res) => {
   res.send('Bienvenue sur Adaence backend !');
+});
+
+// Pour les e-mail
+app.get('/send-test-mail', async (req, res) => {
+  try {
+    const previewUrl = await sendTestEmail('testemail@exemple.com'); 
+    res.json({ message: 'Mail envoyé !', previewUrl });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erreur lors de l’envoi du mail' });
+  }
 });
 
 // Point d'entrée routes externes (features en attente) 
