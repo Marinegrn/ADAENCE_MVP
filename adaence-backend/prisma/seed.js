@@ -2,10 +2,17 @@
 const { PrismaClient } = require('../src/generated/prisma');
 const prisma = new PrismaClient();
 const { v4: uuidv4 } = require('uuid');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 async function main() {
   console.log('🚀 Démarrage du seed...');
+
+  // Nettoyage complet des données TEST
+  await prisma.booking.deleteMany();
+  await prisma.availableSlot.deleteMany();
+  await prisma.seniorProfile.deleteMany();
+  await prisma.volunteerApplication.deleteMany();
+  await prisma.user.deleteMany();
 
   const usersData = [
     {
@@ -21,9 +28,9 @@ async function main() {
     },
     {
       id: uuidv4(),
-      email: 'marie.aine@martinique.fr',
+      email: 'marielle.aine@martinique.fr',
       password: 'password123',
-      firstName: 'Marie',
+      firstName: 'Marielle',
       lastName: 'Ainé',
       phone: '+59698765432',
       role: 'SENIOR',
@@ -117,7 +124,40 @@ async function main() {
       role: 'VISITOR',
       createdAt: new Date(),
       updatedAt: new Date(),
-    }
+    },
+    {
+      id: uuidv4(),
+      email: 'jacques.aine@brest.fr',
+      password: 'password123',
+      firstName: 'Jacques',
+      lastName: 'Ainé',
+      phone: '+33298765432',
+      role: 'SENIOR',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: uuidv4(),
+      email: 'aline.aine@guyane.fr',
+      password: 'password123',
+      firstName: 'Aline',
+      lastName: 'Ainé',
+      phone: '+33412345678',
+      role: 'SENIOR',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: uuidv4(),
+      email: 'gerard.benevole@bordeaux.fr',
+      password: 'password123',
+      firstName: 'Gérard',
+      lastName: 'Bénévole',
+      phone: '+33512345678',
+      role: 'VISITOR',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },  
   ];
 
   // Hash des mots de passe et insertion des users
@@ -156,7 +196,7 @@ async function main() {
     },
     {
       id: uuidv4(),
-      userId: getUserIdByEmail('marie.aine@martinique.fr'),
+      userId: getUserIdByEmail('marielle.aine@martinique.fr'),
       age: 82,
       bio: "Aime la musique créole et les promenades en bord de mer.",
       location: "Fort-de-France, Martinique",
@@ -206,17 +246,6 @@ async function main() {
       location: "Brest, Bretagne",
       photo: null,
       activities: ['Jeux de cartes', 'Chants marins', 'Marche'],
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      userId: getUserIdByEmail('ahmed.aine@strasbourg.fr'),
-      age: 76,
-      bio: "Très sociable, adore les jeux de société et le thé à la menthe.",
-      location: "Strasbourg, Grand Est",
-      photo: null,
-      activities: ['Jeux', 'Cuisine', 'Conversations'],
       createdAt: new Date(),
       updatedAt: new Date(),
     },
@@ -346,7 +375,7 @@ async function main() {
     },
     {
       id: uuidv4(),
-      seniorId: seniors.find(s => s.userId === getUserIdByEmail('marie.aine@martinique.fr')).id,
+      seniorId: seniors.find(s => s.userId === getUserIdByEmail('marielle.aine@martinique.fr')).id,
       date: new Date('2025-07-11'),
       startTime: '14:00',
       endTime: '16:00',
@@ -386,7 +415,7 @@ async function main() {
 },
 {
   id: uuidv4(),
-  seniorId: seniors.find(s => s.userId === getUserIdByEmail('marie.aine@martinique.fr')).id,
+  seniorId: seniors.find(s => s.userId === getUserIdByEmail('marielle.aine@martinique.fr')).id,
   date: new Date('2025-07-20'),
   startTime: '16:00',
   endTime: '18:00',
@@ -450,7 +479,7 @@ async function main() {
     {
       id: uuidv4(),
       visitorId: getUserIdByEmail('sophie.benevole@mayotte.fr'),
-      seniorId: seniors.find(s => s.userId === getUserIdByEmail('marie.aine@martinique.fr')).id,
+      seniorId: seniors.find(s => s.userId === getUserIdByEmail('marielle.aine@martinique.fr')).id,
       slotId: slots[1].id,
       message: 'Promenade au parc, ça va être top !',
       status: 'PENDING',
