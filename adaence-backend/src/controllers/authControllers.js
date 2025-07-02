@@ -34,7 +34,7 @@ const register = async (req, res) => {
       },
     });
 
-    // Si rôle SENIOR, tu peux créer un profil senior vide (optionnel)
+    // Si rôle SENIOR : création de profil vide
     if (role === 'SENIOR') {
       await prisma.seniorProfile.create({
         data: {
