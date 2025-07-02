@@ -11,6 +11,7 @@ async function main() {
   await prisma.booking.deleteMany();
   await prisma.availableSlot.deleteMany();
   await prisma.seniorProfile.deleteMany();
+  await prisma.activity.deleteMany(); 
   await prisma.volunteerApplication.deleteMany();
   await prisma.user.deleteMany();
 
