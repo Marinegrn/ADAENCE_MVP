@@ -32,3 +32,27 @@ exports.createSenior = async (req, res) => {
   }
 };
 
+exports.updateSenior = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedSenior = await prisma.seniorProfile.update({
+      where: { id },
+      data: req.body,
+    });
+    res.json(updatedSenior);
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur modification senior', details: err.message });
+  }
+};
+
+exports.deleteSenior = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.seniorProfile.delete({ where: { id } });
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur suppression senior', details: err.message });
+  }
+};
+
+

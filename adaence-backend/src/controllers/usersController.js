@@ -28,3 +28,36 @@ exports.createUser = async (req, res) => {
     res.status(500).json({ error: 'Erreur création utilisateur', details: err.message });
   }
 };
+
+exports.updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { password, ...rest } = req.body;
+
+    let updateData = { ...rest };
+    if (password) {
+      const hashed = await bcrypt.hash(password, 10);
+      updateData.password = hashed;
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: updateData,
+    });
+
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur modification utilisateur', details: err.message });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.user.delete({ where: { id } });
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur suppression utilisateur', details: err.message });
+  }
+};
+

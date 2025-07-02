@@ -1,6 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { createApplication, getAllApplications } = require('../controllers/applicationsController');
+const {
+  getAllApplications,
+  createApplication,
+  updateApplication,
+  deleteApplication,
+} = require('../controllers/applicationsController');
+
 const volunteerApplicationValidation = require('../validations/volunteerApplicationValidation');
 const { validationResult } = require('express-validator');
 
@@ -14,6 +20,10 @@ router.post('/', volunteerApplicationValidation, async (req, res) => {
 
   return createApplication(req, res);
 });
+
+router.put('/:id', updateApplication);
+router.patch('/:id', updateApplication);
+router.delete('/:id', deleteApplication);
 
 module.exports = router;
 

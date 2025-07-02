@@ -17,3 +17,27 @@ exports.createSlot = async (req, res) => {
   }
 };
 
+exports.updateSlot = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedSlot = await prisma.availableSlot.update({
+      where: { id },
+      data: req.body,
+    });
+    res.json(updatedSlot);
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur modification créneau', details: err.message });
+  }
+};
+
+exports.deleteSlot = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.availableSlot.delete({ where: { id } });
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur suppression créneau', details: err.message });
+  }
+};
+
+

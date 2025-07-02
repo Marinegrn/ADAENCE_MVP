@@ -35,3 +35,26 @@ exports.createBooking = async (req, res) => {
   }
 };
 
+exports.updateBooking = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedBooking = await prisma.booking.update({
+      where: { id },
+      data: req.body,
+    });
+    res.json(updatedBooking);
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur modification réservation', details: err.message });
+  }
+};
+
+exports.deleteBooking = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.booking.delete({ where: { id } });
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur suppression réservation', details: err.message });
+  }
+};
+
