@@ -8,10 +8,6 @@ router.get('/', async (req, res) => {
   res.json(users);
 });
 
-router.post('/', async (req, res) => {
-  const data = req.body;
-  const newUser = await prisma.user.create({ data });
-  res.status(201).json(newUser);
-});
+router.post('/', createUser);
 
 module.exports = router;

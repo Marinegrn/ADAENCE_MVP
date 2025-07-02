@@ -9,9 +9,21 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const data = req.body;
-  const newActivity = await prisma.activity.create({ data });
-  res.status(201).json(newActivity);
+  try {
+    const { name, description, icon } = req.body;
+
+    if (!name || !description || !icon) {
+      return res.status(400).json({ error: 'Tous les champs sont requis' });
+    }
+
+    const newActivity = await prisma.activity.create({
+      data: { name, description, icon },
+    });
+
+    res.status(201).json(newActivity);
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
 });
 
 module.exports = router;

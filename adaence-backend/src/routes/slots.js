@@ -11,9 +11,28 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const data = req.body;
-  const newSlot = await prisma.availableSlot.create({ data });
-  res.status(201).json(newSlot);
+  try {
+    const { seniorId, date, startTime, endTime, activity } = req.body;
+
+    if (!seniorId || !date || !startTime || !endTime || !activity) {
+      return res.status(400).json({ error: 'Champs requis manquants' });
+    }
+
+    const newSlot = await prisma.availableSlot.create({
+      data: {
+        seniorId,
+        date: new Date(date),
+        startTime,
+        endTime,
+        activity,
+      },
+    });
+
+    res.status(201).json(newSlot);
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur création créneau' });
+  }
 });
+
 
 module.exports = router;

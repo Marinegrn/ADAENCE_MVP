@@ -11,10 +11,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST
-router.post(
-  '/',
-  volunteerApplicationValidation,
-  async (req, res) => {
+router.post('/', volunteerApplicationValidation, async (req, res) => {
     // Vérifie les erreurs de validation
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

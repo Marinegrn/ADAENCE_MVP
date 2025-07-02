@@ -11,9 +11,28 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const data = req.body;
-  const newSenior = await prisma.seniorProfile.create({ data });
-  res.status(201).json(newSenior);
+  try {
+    const { userId, age, bio, location, activities, photo } = req.body;
+
+    if (!userId || !age || !bio || !location) {
+      return res.status(400).json({ error: 'Certains champs obligatoires sont manquants' });
+    }
+
+    const newSenior = await prisma.seniorProfile.create({
+      data: {
+        userId,
+        age: Number(age),
+        bio,
+        location,
+        activities,
+        photo,
+      },
+    });
+
+    res.status(201).json(newSenior);
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur lors de la création du profil senior' });
+  }
 });
 
 module.exports = router;
