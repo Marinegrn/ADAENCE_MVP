@@ -1,11 +1,12 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
-const prisma = require('../utils/prisma');
+const prisma = require('../prisma/client');
 
 // Inscription
 const register = async (req, res) => {
   try {
+    // Validation des données
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -14,10 +15,7 @@ const register = async (req, res) => {
     const { email, password, nom, prenom, typeUser, age, ville, telephone } = req.body;
 
     // Vérifier si l'utilisateur existe déjà
-    const existingUser = await prisma.user.findUnique({
-      where: { email }
-    });
-
+    const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
       return res.status(400).json({ error: 'Un utilisateur avec cet email existe déjà' });
     }
@@ -33,21 +31,21 @@ const register = async (req, res) => {
         nom,
         prenom,
         typeUser,
-        age: parseInt(age),
+        age: age ? parseInt(age) : null,
         ville,
         telephone
       }
     });
 
-    // Créer le profil spécifique selon le type
+    // Créer le profil spécifique selon le type d'utilisateur
     if (typeUser === 'AINE') {
       await prisma.aine.create({
         data: {
           userId: user.id,
           bio: '',
           centresInteret: [],
-          mobilite: 'MOYENNE'
-        }
+          mobilite: 'MOYENNE',
+        },
       });
     } else if (typeUser === 'BENEVOLE') {
       await prisma.benevole.create({
@@ -55,8 +53,8 @@ const register = async (req, res) => {
           userId: user.id,
           bio: '',
           disponibilites: [],
-          competences: []
-        }
+          competences: [],
+        },
       });
     }
 
@@ -67,6 +65,7 @@ const register = async (req, res) => {
       { expiresIn: '7d' }
     );
 
+    // Réponse
     res.status(201).json({
       message: 'Utilisateur créé avec succès',
       token,
@@ -75,10 +74,9 @@ const register = async (req, res) => {
         email: user.email,
         nom: user.nom,
         prenom: user.prenom,
-        typeUser: user.typeUser
-      }
+        typeUser: user.typeUser,
+      },
     });
-
   } catch (error) {
     console.error('Erreur inscription:', error);
     res.status(500).json({ error: 'Erreur lors de l\'inscription' });
@@ -88,6 +86,7 @@ const register = async (req, res) => {
 // Connexion
 const login = async (req, res) => {
   try {
+    // Validation des données
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -95,13 +94,13 @@ const login = async (req, res) => {
 
     const { email, password } = req.body;
 
-    // Trouver l'utilisateur
+    // Trouver l'utilisateur avec ses profils liés
     const user = await prisma.user.findUnique({
       where: { email },
       include: {
         aine: true,
-        benevole: true
-      }
+        benevole: true,
+      },
     });
 
     if (!user) {
@@ -121,6 +120,7 @@ const login = async (req, res) => {
       { expiresIn: '7d' }
     );
 
+    // Réponse avec token et user
     res.json({
       message: 'Connexion réussie',
       token,
@@ -130,10 +130,9 @@ const login = async (req, res) => {
         nom: user.nom,
         prenom: user.prenom,
         typeUser: user.typeUser,
-        profil: user.aine || user.benevole
-      }
+        profil: user.aine || user.benevole,
+      },
     });
-
   } catch (error) {
     console.error('Erreur connexion:', error);
     res.status(500).json({ error: 'Erreur lors de la connexion' });

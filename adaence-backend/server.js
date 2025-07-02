@@ -6,11 +6,9 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
 
-
 // Chargement variable d'env depuis .env 
 dotenv.config();
 
-// instance framework Express
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -38,6 +36,7 @@ const activityRoutes = require('./src/routes/activities');
 const slotRoutes = require('./src/routes/slots');
 const bookingRoutes = require('./src/routes/bookings');
 const applicationRoutes = require('./src/routes/applications');
+const authRoutes = require('./src/routes/auth')
 
 app.use('/api/users', userRoutes);
 app.use('/api/seniors', seniorRoutes);
@@ -45,6 +44,7 @@ app.use('/api/activities', activityRoutes);
 app.use('/api/slots', slotRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/applications', applicationRoutes);
+app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
   res.send('Bienvenue sur Adaence backend !');
@@ -60,10 +60,6 @@ app.get('/send-test-mail', async (req, res) => {
     res.status(500).json({ error: 'Erreur lors de l’envoi du mail' });
   }
 });
-
-// Point d'entrée routes externes (features en attente) 
-// const apiRoutes = require('./src/routes/');
-// app.use('/api', apiRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`);

@@ -1,6 +1,11 @@
 const prisma = require('../prisma/client');
 const bcrypt = require('bcryptjs');
 
+exports.getAllUsers = async (req, res) => {
+  const users = await prisma.user.findMany();
+  res.json(users);
+};
+
 exports.createUser = async (req, res) => {
   try {
     const { email, password, firstName, lastName, phone, role } = req.body;

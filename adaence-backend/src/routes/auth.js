@@ -1,26 +1,27 @@
-// const express = require('express');
-// const { body } = require('express-validator');
-// const { register, login } = require('../controllers/authController');
+const express = require('express');
+const { body } = require('express-validator');
+const { register, login } = require('../controllers/authControllers');
 
-// const router = express.Router();
+const router = express.Router();
 
-// // Validation pour l'inscription
-// const registerValidation = [
-//   body('email').isEmail().withMessage('Email invalide'),
-//   body('password').isLength({ min: 6 }).withMessage('Le mot de passe doit contenir au moins 6 caractères'),
-//   body('nom').notEmpty().withMessage('Le nom est requis'),
-//   body('prenom').notEmpty().withMessage('Le prénom est requis'),
-//   body('typeUser').isIn(['AINE', 'BENEVOLE']).withMessage('Type d\'utilisateur invalide')
-// ];
+// Validation des inputs pour inscription
+const registerValidation = [
+  body('email').isEmail().withMessage('Email invalide'),
+  body('password').isLength({ min: 6 }).withMessage('Le mot de passe doit contenir au moins 6 caractères'),
+  body('nom').notEmpty().withMessage('Le nom est obligatoire'),
+  body('prenom').notEmpty().withMessage('Le prénom est obligatoire'),
+  body('typeUser').isIn(['AINE', 'BENEVOLE']).withMessage('Type utilisateur invalide'),
+  // tu peux ajouter d’autres validations si besoin (age, ville, téléphone...)
+];
 
-// // Validation pour la connexion
-// const loginValidation = [
-//   body('email').isEmail().withMessage('Email invalide'),
-//   body('password').notEmpty().withMessage('Mot de passe requis')
-// ];
+// Validation des inputs pour connexion
+const loginValidation = [
+  body('email').isEmail().withMessage('Email invalide'),
+  body('password').notEmpty().withMessage('Le mot de passe est obligatoire'),
+];
 
-// // Routes
-// router.post('/register', registerValidation, register);
-// router.post('/login', loginValidation, login);
+// Routes
+router.post('/register', registerValidation, register);
+router.post('/login', loginValidation, login);
 
-// module.exports = router;
+module.exports = router;
