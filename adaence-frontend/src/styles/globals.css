@@ -1,4 +1,9 @@
-@import "tailwindcss";
+@import "tailwindcss"; 
+/*@tailwind base;
+@tailwind components;
+@tailwind utilities; n'est plus valide sur v4*/
+
+
 
 :root {
   --background: #ffffff;
