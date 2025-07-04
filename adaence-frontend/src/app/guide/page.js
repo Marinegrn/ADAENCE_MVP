@@ -56,11 +56,18 @@ const GuidePage = () => {
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
           
           {/* Hero Image Section */}
-          <div className="relative h-96 bg-gradient-to-r from-purple-600 to-blue-600 flex items-center justify-center overflow-hidden">
+          <div 
+          className="relative h-96 flex items-center justify-center overflow-hidden bg-cover bg-center"
+          style={{ 
+              backgroundImage: "url('/assets/sharing.jpg')", 
+              backgroundPosition: "50% 65%", // horizontal 50%, vertical 50%
+              backgroundSize: "cover",
+            }}
+          >
             <div className="absolute inset-0 bg-black/20"></div>
             <div className="relative z-10 text-center text-white px-4">
               <h2 className="text-4xl font-bold mb-4">Ensemble, nous construisons des ponts</h2>
-              <p className="text-xl opacity-90">La solidarité intergénérationnelle au cœur de notre mission</p>
+              <p className="text-xl opacity-90">La solidarité intergénérationnelle au cœur de notre mission !</p>
             </div>
             {/* Decorative elements */}
             <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>

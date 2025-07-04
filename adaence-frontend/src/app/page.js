@@ -52,7 +52,13 @@ const AdaenceLandingPage = () => {
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-gray-900 to-gray-700 text-white" aria-label="Section accueil">
         <div className="absolute inset-0 bg-black bg-opacity-50" aria-hidden="true"></div>
-        <div className="relative max-w-7xl mx-auto px-4 py-24 text-center">
+        <div 
+        className="relative max-w-7xl mx-auto px-4 py-24 text-center"
+        style={{ 
+          backgroundImage: "url('/assets/homepage.jpg')", 
+          backgroundPosition: "50% 65%", // horizontal 50%, vertical 50%
+          backgroundSize: "cover",
+        }}>
           <h1 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
             RÉTABLISSONS LES LIENS
           </h1>
