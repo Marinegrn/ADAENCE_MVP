@@ -139,72 +139,72 @@ const AdaenceVisitPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50" lang="fr">
-      <main className="container mx-auto px-4 py-8">
-        <section className="bg-white rounded-lg shadow-sm p-6 mb-8" aria-labelledby="filtrer-rencontres">
-          <h2 id="filtrer-rencontres" className="sr-only">Filtres de recherche</h2>
-          <form className="grid md:grid-cols-3 gap-4" role="search" aria-label="Filtrer les profils">
-            <div>
-              <label htmlFor="moment" className="block text-sm font-medium text-gray-700 mb-2">
-                Moment à partager
-              </label>
-              <select
-                id="moment"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                value={selectedMoment}
-                onChange={(e) => setSelectedMoment(e.target.value)}
-              >
-                <option value="tous">Tous les moments possibles</option>
-                <option value="culturel">Sortie culturelle</option>
-                <option value="nature">Balade en nature</option>
-                <option value="cafe">Café discussion</option>
-                <option value="creatif">Activité créative</option>
-                <option value="jeux">Jeux de société</option>
-                <option value="musique">Musique</option>
-                <option value="cuisine">Cuisine</option>
-                <option value="lecture">Lecture</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
-                Localisation
-              </label>
-              <input
-                id="location"
-                type="text"
-                placeholder="Votre ville"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-              />
-            </div>
-            <div className="flex items-end">
-              <button
-                type="submit"
-                className="w-full bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center"
-                aria-label="Rechercher des moments disponibles"
-              >
-                <Search className="w-4 h-4 mr-2" />
-                Rechercher
-              </button>
-            </div>
-          </form>
-          <p className="mt-4 text-sm text-gray-600" aria-live="polite">
-            <strong>{profiles.length}</strong> moments trouvés
-            <button className="text-orange-500 hover:text-orange-600 ml-4" aria-label="Réinitialiser les filtres">
-              Réinitialiser les filtres
+  <div className="min-h-screen bg-gray-50" lang="fr">
+    <main className="container mx-auto px-4 py-8">
+      <section className="bg-white rounded-lg shadow-sm p-6 mb-8" aria-labelledby="filtrer-rencontres">
+        <h2 id="filtrer-rencontres" className="sr-only">Filtres de recherche</h2>
+        <form className="grid md:grid-cols-3 gap-4" role="search" aria-label="Filtrer les profils">
+          <div>
+            <label htmlFor="moment" className="block text-sm font-medium text-gray-700 mb-2">
+              Moment à partager
+            </label>
+            <select
+              id="moment"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-900"
+              value={selectedMoment}
+              onChange={(e) => setSelectedMoment(e.target.value)}
+            >
+              <option value="tous">Tous les moments possibles</option>
+              <option value="culturel">Sortie culturelle</option>
+              <option value="nature">Balade en nature</option>
+              <option value="cafe">Café discussion</option>
+              <option value="creatif">Activité créative</option>
+              <option value="jeux">Jeux de société</option>
+              <option value="musique">Musique</option>
+              <option value="cuisine">Cuisine</option>
+              <option value="lecture">Lecture</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
+              Localisation
+            </label>
+            <input
+              id="location"
+              type="text"
+              placeholder="Votre ville"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-900"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
+          </div>
+          <div className="flex items-end">
+            <button
+              type="submit"
+              className="w-full bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center"
+              aria-label="Rechercher des moments disponibles"
+            >
+              <Search className="w-4 h-4 mr-2" />
+              Rechercher
             </button>
-          </p>
-        </section>
+          </div>
+        </form>
+        <p className="mt-4 text-sm text-gray-600" aria-live="polite">
+          <strong>{profiles.length}</strong> moments trouvés
+          <button className="text-orange-500 hover:text-orange-600 ml-4" aria-label="Réinitialiser les filtres">
+            Réinitialiser les filtres
+          </button>
+        </p>
+      </section>
 
-        <section className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" aria-label="Liste des profils disponibles">
-          {currentProfiles.map((profile) => (
-            <ProfileCard key={profile.id} profile={profile} />
-          ))}
-        </section>
-      </main>
-    </div>
-  );
+      <section className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" aria-label="Liste des profils disponibles">
+        {currentProfiles.map((profile) => (
+          <ProfileCard key={profile.id} profile={profile} />
+        ))}
+      </section>
+    </main>
+  </div>
+);
 };
 
 export default AdaenceVisitPage;

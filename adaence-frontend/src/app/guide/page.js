@@ -46,7 +46,7 @@ const GuidePage = () => {
             Guide de Partage
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Découvrez l&apos;histoire, les valeurs et l&apos;esprit qui animent notre communauté dédiée au respect et à l&apos;inclusion des aînés.
+            Découvrez l&apos;histoire, les valeurs et l&apos;esprit qui animent notre communauté dédiée au respect et à l&apos;inclusion, afin que les aînés ne se sentent plus exclus.
           </p>
         </div>
       </section>
@@ -97,7 +97,7 @@ const GuidePage = () => {
             {activeSection === 'histoire' && (
               <div className="space-y-8 animate-fade-in">
                 <div className="text-center mb-12">
-                  <h3 className="text-3xl font-bold text-gray-900 mb-4">Notre Histoire</h3>
+                  <h3 className="text-3xl font-bold text-gray-900 mb-4">Notre histoire</h3>
                   <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                     Adaence est né d&apos;une vision simple mais puissante : créer un espace où les générations se rencontrent, 
                     s&apos;entraident et partagent leurs richesses respectives.
@@ -109,7 +109,7 @@ const GuidePage = () => {
                     <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-xl">
                       <h4 className="text-xl font-semibold text-gray-900 mb-3">Les origines</h4>
                       <p className="text-gray-600">
-                        En 2023, face au constat d&apos;un isolement croissant des personnes âgées et d&apos;un manque de connexion intergénérationnelle, 
+                        En 2015, face au constat d&apos;un isolement croissant des personnes âgées et d&apos;un manque de connexion intergénérationnelle, 
                         notre équipe a décidé de créer une plateforme révolutionnaire.
                       </p>
                     </div>
@@ -152,7 +152,7 @@ const GuidePage = () => {
             {activeSection === 'valeurs' && (
               <div className="space-y-8 animate-fade-in">
                 <div className="text-center mb-12">
-                  <h3 className="text-3xl font-bold text-gray-900 mb-4">Nos Valeurs</h3>
+                  <h3 className="text-3xl font-bold text-gray-900 mb-4">Nos valeurs</h3>
                   <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                     Ces principes fondamentaux guident chacune de nos actions et définissent l&apos;esprit de notre communauté.
                   </p>
@@ -192,12 +192,12 @@ const GuidePage = () => {
                     <div className="text-3xl mb-4">♿</div>
                     <h4 className="text-xl font-semibold text-gray-900 mb-3">Accessibilité</h4>
                     <p className="text-gray-600">
-                      Notre plateforme est conçue pour être accessible à tous, quels que soient les besoins spécifiques.
+                      Notre plateforme est conçue pour être accessible à tous.tes, quels que soient les besoins spécifiques.
                     </p>
                   </div>
                   <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-2xl">
                     <div className="text-3xl mb-4">🤝</div>
-                    <h4 className="text-xl font-semibold text-gray-900 mb-3">Égalité des chances</h4>
+                    <h4 className="text-xl font-semibold text-gray-900 mb-3">Égalité</h4>
                     <p className="text-gray-600">
                       Chaque membre a les mêmes opportunités de partager, d&apos;apprendre et de contribuer.
                     </p>
@@ -258,7 +258,7 @@ const GuidePage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8">
             <div>
-              <h3 className="text-xl font-bold mb-4">AdamSenior</h3>
+              <h3 className="text-xl font-bold mb-4">Adaence</h3>
               <p className="text-gray-400">
                 Construisons ensemble une société plus inclusive et respectueuse de toutes les générations.
               </p>
@@ -281,7 +281,7 @@ const GuidePage = () => {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 AdamSenior. Tous droits réservés.</p>
+            <p>&copy; 2025 Adaence. Tous droits réservés.</p>
           </div>
         </div>
       </footer>
