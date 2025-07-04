@@ -265,3 +265,4 @@ const AdaenceLandingPage = () => {
 };
 
 export default AdaenceLandingPage;
+
