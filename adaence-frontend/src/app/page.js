@@ -1,9 +1,9 @@
 'use client';
 
+import Head from 'next/head';
 import React, { useState } from 'react';
 import { Search, Edit, Share2, Heart, Facebook, Instagram, Youtube, Twitter } from 'lucide-react';
 import Image from 'next/image';
-
 
 const AdaenceLandingPage = () => {
   const [formData, setFormData] = useState({
@@ -18,12 +18,40 @@ const AdaenceLandingPage = () => {
     });
   };
 
+  const handleSearch = () => {
+    console.log('Recherche lancée avec:', formData);
+    // Nav ou requête API
+  };
+
+  const handleViewAllProfiles = () => {
+    console.log('Voir tous les profils');
+    // Nav/Action à définir
+  };
+
+  // Profils TEST Front - Maquette de base
+  const profils = [
+    { id: 1, name: "Marie", age: 78, image: "https://placehold.co/300x400" },
+    { id: 2, name: "Pierre", age: 82, image: "https://placehold.co/300x400" },
+    { id: 3, name: "Jeanne", age: 75, image: "https://placehold.co/300x400" },
+    { id: 4, name: "Henri", age: 80, image: "https://placehold.co/300x400" },
+    { id: 5, name: "Colette", age: 77, image: "https://placehold.co/300x400" },
+    { id: 6, name: "André", age: 84, image: "https://placehold.co/300x400" },
+    { id: 7, name: "Simone", age: 79, image: "https://placehold.co/300x400" },
+    { id: 8, name: "Marcel", age: 81, image: "https://placehold.co/300x400" }
+  ];
+
   return (
+        <> 
+      <Head>
+        <title>Adaence – Offrez un moment aux aînés isolés</title>
+        <meta name="description" content="Recréez du lien avec les personnes âgées. Organisez une visite solidaire avec Adaence." />
+      </Head> 
+      
     <div className="min-h-screen bg-white">
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-gray-900 to-gray-700 text-white">
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      <section className="relative bg-gradient-to-r from-gray-900 to-gray-700 text-white" aria-label="Section accueil">
+        <div className="absolute inset-0 bg-black bg-opacity-50" aria-hidden="true"></div>
         <div className="relative max-w-7xl mx-auto px-4 py-24 text-center">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
             RÉTABLISSONS LES LIENS
@@ -37,10 +65,11 @@ const AdaenceLandingPage = () => {
           <div className="bg-white rounded-lg p-6 max-w-4xl mx-auto shadow-2xl">
             <div className="grid md:grid-cols-2 gap-4 mb-6">
               <div>
-                <label className="block text-gray-700 text-sm font-medium mb-2 text-left">
+                <label htmlFor="momentPartage" className="block text-gray-700 text-sm font-medium mb-2 text-left">
                   Moment à partager
                 </label>
                 <input
+                  id="momentPartage"
                   type="text"
                   name="momentPartage"
                   value={formData.momentPartage}
@@ -50,10 +79,11 @@ const AdaenceLandingPage = () => {
                 />
               </div>
               <div>
-                <label className="block text-gray-700 text-sm font-medium mb-2 text-left">
+                <label htmlFor="localisation" className="block text-gray-700 text-sm font-medium mb-2 text-left">
                   Localisation
                 </label>
                 <input
+                  id="localisation"
                   type="text"
                   name="localisation"
                   value={formData.localisation}
@@ -63,7 +93,11 @@ const AdaenceLandingPage = () => {
                 />
               </div>
             </div>
-            <button className="w-full md:w-auto bg-gray-800 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition-colors font-medium">
+            <button 
+              onClick={handleSearch}
+              className="w-full md:w-auto bg-gray-800 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition-colors font-medium"
+              aria-label="Lancer la recherche"
+            >
               Rechercher →
             </button>
           </div>
@@ -71,7 +105,7 @@ const AdaenceLandingPage = () => {
       </section>
 
       {/* Profiles Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50" aria-label="Personnalités à rencontrer">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             LES PERSONNALITÉS À RENCONTRER
@@ -83,35 +117,35 @@ const AdaenceLandingPage = () => {
           
           {/* Profile Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
-            {[
-              { id: 1, name: "Marie", age: 78, image: "/api/placeholder/300/400" },
-              { id: 2, name: "Pierre", age: 82, image: "/api/placeholder/300/400" },
-              { id: 3, name: "Jeanne", age: 75, image: "/api/placeholder/300/400" },
-              { id: 4, name: "Henri", age: 80, image: "/api/placeholder/300/400" },
-              { id: 5, name: "Colette", age: 77, image: "/api/placeholder/300/400" },
-              { id: 6, name: "André", age: 84, image: "/api/placeholder/300/400" },
-              { id: 7, name: "Simone", age: 79, image: "/api/placeholder/300/400" },
-              { id: 8, name: "Marcel", age: 81, image: "/api/placeholder/300/400" }
-            ].map((person) => (
-              <div key={person.id} className="group cursor-pointer">
-                <div className="aspect-[3/4] bg-gray-300 rounded-lg overflow-hidden mb-3 group-hover:shadow-lg transition-shadow">
-                  <div className="w-full h-full bg-gradient-to-b from-gray-400 to-gray-600 flex items-center justify-center">
-                    <span className="text-white text-lg font-medium">{person.name}</span>
-                  </div>
+            {profils.map((person) => (
+              <div key={person.id} className="group cursor-pointer" tabIndex={0} aria-label={`Profil de ${person.name}, ${person.age} ans`}>
+                <div className="aspect-[3/4] rounded-lg overflow-hidden mb-3 group-hover:shadow-lg transition-shadow relative bg-gray-300">
+                  <Image 
+                    src={person.image} 
+                    alt={`Photo de ${person.name}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 300px"
+                    priority
+                  />
                 </div>
                 <h3 className="font-semibold text-gray-900">{person.name}, {person.age} ans</h3>
               </div>
             ))}
           </div>
           
-          <button className="bg-gray-800 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+          <button
+            onClick={handleViewAllProfiles}
+            className="bg-gray-800 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition-colors"
+            aria-label="Voir tous les profils"
+          >
             Voir tous les profils
           </button>
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white" aria-label="Comment ça marche">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold text-gray-900 mb-16">
             COMMENT ÇA MARCHE
@@ -121,129 +155,36 @@ const AdaenceLandingPage = () => {
             toute simplicité.
           </p>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Search className="w-8 h-8 text-indigo-600" />
+          <div className=" text-gray-900 grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            {[
+              { Icon: Search, title: "1. Choisissez une rencontre", text: "Parcourez les profils de nos aînés et trouvez la personne avec qui vous aimeriez partager un moment chaleureux." },
+              { Icon: Edit, title: "2. Remplissez le formulaire", text: "Indiquez vos disponibilités et vos envies. Cela nous aide à organiser une rencontre adaptée et en toute confiance." },
+              { Icon: Share2, title: "3. Partagez un moment", text: "Rendez visite à la personne âgée dans un cadre bienveillant. Une discussion, une balade ou simplement tenir la main. Chaque moment compte." },
+              { Icon: Heart, title: "4. Créez du lien", text: "Si le cœur y est, vous pouvez revenir. L'amitié naît souvent des petits gestes du quotidien. Chaque visite la nourrit un peu plus." }
+            ].map(({ Icon, title, text }, idx) => (
+              <div key={idx} className="text-center">
+                <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Icon className="w-8 h-8 text-indigo-600" aria-hidden="true" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">{title}</h3>
+                <p className="text-gray-600">{text}</p>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                1. Choisissez une rencontre
-              </h3>
-              <p className="text-gray-600">
-                Parcourez les profils de nos aînés et trouvez la personne avec qui vous aimeriez partager un moment chaleureux.
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Edit className="w-8 h-8 text-indigo-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                2. Remplissez le formulaire
-              </h3>
-              <p className="text-gray-600">
-                Indiquez vos disponibilités et vos envies. Cela nous aide à organiser une rencontre adaptée et en toute confiance.
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Share2 className="w-8 h-8 text-indigo-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                3. Partagez un moment
-              </h3>
-              <p className="text-gray-600">
-                Rendez visite à la personne âgée dans un cadre bienveillant. Une discussion, une balade ou simplement tenir la main. Chaque moment compte.
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Heart className="w-8 h-8 text-indigo-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                4. Créez du lien
-              </h3>
-              <p className="text-gray-600">
-                Si le cœur y est, vous pouvez revenir. L&apos;amitié naît souvent des petits gestes du quotidien. Chaque visite la nourrit un peu plus.
-              </p>
-            </div>
+            ))}
+          </div>
+
+          <div className="flex justify-center space-x-8 text-gray-400">
+            <Facebook aria-hidden="true" className="w-6 h-6 cursor-pointer hover:text-blue-600" />
+            <Instagram aria-hidden="true" className="w-6 h-6 cursor-pointer hover:text-pink-600" />
+            <Youtube aria-hidden="true" className="w-6 h-6 cursor-pointer hover:text-red-600" />
+            <Twitter aria-hidden="true" className="w-6 h-6 cursor-pointer hover:text-sky-500" />
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-indigo-600 text-white">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-6">
-            PRÊT À FAIRE LA DIFFÉRENCE ?
-          </h2>
-          <p className="text-xl mb-8 leading-relaxed">
-            Offrir un peu de votre temps, partager un moment, créer du lien. Chaque présence compte. En 
-            tendant la main à une personne âgée, vous lui offrez bien plus qu&apos;une visite : une bouffée de 
-            chaleur humaine.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-indigo-600 px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors font-medium">
-              Programmer une visite
-            </button>
-            <button className="bg-yellow-400 text-gray-900 px-8 py-3 rounded-lg hover:bg-yellow-300 transition-colors font-medium">
-              Faire un don
-            </button>
-            <button className="border-2 border-white text-white px-8 py-3 rounded-lg hover:bg-white hover:text-indigo-600 transition-colors font-medium">
-              Devenir bénévole
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-xl font-semibold mb-4">ADAENCE</h3>
-              <p className="text-gray-400 mb-6">
-                Notre mission est de recréer du lien avec les personnes âgées isolées, en leur offrant des moments d&apos;écoute et de présence.
-              </p>
-              <div className="flex space-x-4">
-                <Facebook className="w-6 h-6 text-gray-400 hover:text-white cursor-pointer" />
-                <Instagram className="w-6 h-6 text-gray-400 hover:text-white cursor-pointer" />
-                <Youtube className="w-6 h-6 text-gray-400 hover:text-white cursor-pointer" />
-                <Twitter className="w-6 h-6 text-gray-400 hover:text-white cursor-pointer" />
-              </div>
-            </div>
-            
-            <div>
-              <h3 className="text-xl font-semibold mb-4">INFORMATIONS UTILES</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white">FAQ</a></li>
-                <li><a href="#" className="hover:text-white">Liste des activités</a></li>
-                <li><a href="#" className="hover:text-white">Nous contacter</a></li>
-                <li><a href="#" className="hover:text-white">Mentions légales</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="text-xl font-semibold mb-4">CONTACT</h3>
-              <div className="text-gray-400 space-y-2">
-                <p>110 Rue du Faubourg Saint-Martin</p>
-                <p>75010 Paris, France</p>
-                <p>Email: contact@adaence.fr</p>
-                <p>Tél: +33 1 42 67 89</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-            <p>© 2024 Adaence. Tous droits réservés.</p>
-            <p className="mt-2">Ce site a été développé dans le cadre d&apos;un projet pour ADA Tech School.</p>
-          </div>
-        </div>
-      </footer>
     </div>
+    </>
   );
 };
 
 export default AdaenceLandingPage;
+
