@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Search, MapPin, ChevronLeft, ChevronRight, User
-} from 'lucide-react';
+import { Search, MapPin, ChevronLeft, ChevronRight, User } from 'lucide-react';
 import Image from 'next/image';
 
 const AdaenceVisitPage = () => {
