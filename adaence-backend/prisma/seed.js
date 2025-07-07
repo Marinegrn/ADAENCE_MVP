@@ -414,13 +414,13 @@ const volunteerApplicationsData = [
   },
 ];
 
-for (const app of volunteerApplicationsData) {
-  await prisma.volunteerApplication.create({ data: app });
-}
-
-
   for (const app of volunteerApplicationsData) {
-    await prisma.volunteerApplication.create({ data: app });
+    await prisma.volunteerApplication.create({
+      data: {
+        ...app,
+        // updatedAt: app.createdAt, // Ajoute updatedAt pour cohérence avec le modèle
+      },
+    });
   }
 
   // AVAILABLE SLOTS
@@ -455,7 +455,18 @@ for (const app of volunteerApplicationsData) {
   ];
 
   for (const slot of availableSlotsData) {
-    await prisma.availableSlot.create({ data: slot });
+    await prisma.availableSlot.create({
+      data: {
+        id: slot.id,
+        seniorId: slot.seniorId,
+        date: new Date(slot.date),
+        duration: slot.duration,
+        isBooked: slot.isBooked,
+        createdAt: new Date(slot.createdAt),
+        updatedAt: new Date(slot.updatedAt),
+        startTime: slot.startTime, // Retiré car non défini dans availableSlotsData
+      }
+    });
   }
 
   // BOOKINGS
