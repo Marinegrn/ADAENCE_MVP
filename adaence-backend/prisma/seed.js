@@ -18,7 +18,7 @@ async function main() {
   // USERS
   const usersData = [
     { id: uuidv4(), email: 'robert.aine@paris.fr', password: 'password123', firstName: 'Robert', lastName: 'Ainé', phone: '+33123456789', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
-    { id: uuidv4(), email: 'marielle.aine@martinique.fr', password: 'password123', firstName: 'Marielle', lastName: 'Ainé', phone: '+59698765432', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'marielle.aine@martinique.fr', password: 'password123', firstName: 'Marielle', lastName: 'Ainé', phone: '+59698765432', role: 'SENIOR', photo: 'marielle.jpg', createdAt: new Date(), updatedAt: new Date() },
     { id: uuidv4(), email: 'jean.aine@reunion.fr', password: 'password123', firstName: 'Jean', lastName: 'Ainé', phone: '+26212345678', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
     { id: uuidv4(), email: 'marie.benevole@guadeloupe.fr', password: 'password123', firstName: 'Marie', lastName: 'Bénévole', phone: '+590690123456', role: 'VISITOR', createdAt: new Date(), updatedAt: new Date() },
     { id: uuidv4(), email: 'sophie.benevole@mayotte.fr', password: 'password123', firstName: 'Sophie', lastName: 'Bénévole', phone: '+26263987654', role: 'VISITOR', createdAt: new Date(), updatedAt: new Date() },
@@ -114,7 +114,7 @@ async function main() {
       age: 82,
       bio: "Aime la musique créole et les promenades en bord de mer.",
       location: "Fort-de-France, Martinique",
-      photo: "/assets/seniors/marielle.jpg",
+      photo: "marielle.jpg",
       activities: ['Musique', 'Cuisine', 'Nature'],
       createdAt: new Date(),
       updatedAt: new Date(),

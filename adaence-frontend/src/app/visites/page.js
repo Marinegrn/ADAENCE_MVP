@@ -41,43 +41,47 @@ const AdaenceVisitPage = () => {
     return matchMoment && matchLocation;
   });
 
-  const ProfileCard = ({ profile, onClick }) => (
-    <article
-      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-      aria-label={`Profil de ${profile.name}`}
-      onClick={() => onClick(profile)}
-    >
-      <div className="relative w-full h-48">
-        <Image
-          src={profile.photo || '/assets/seniors/marielle.jpg'}
-          alt={`Portrait de ${profile.name}`}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, 33vw"
-        />
+const ProfileCard = ({ profile, onClick }) => (
+  <article
+    className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+    aria-label={`Profil de ${profile.user.firstName} ${profile.user.lastName}`}
+    onClick={() => onClick(profile)}
+  >
+    <div className="relative w-full h-48">
+      <Image
+        src={`http://localhost:5000/public/images/seniors/${profile.photo ? profile.photo : 'default.jpg'}`}
+        alt={`Portrait de ${profile.user.firstName} ${profile.user.lastName}`}
+        fill
+        className="object-cover"
+        sizes="(max-width: 768px) 100vw, 33vw"
+      />
+    </div>
+    <div className="p-4">
+      <header className="mb-2">
+        <span className="text-sm text-gray-600">{profile.type}</span>
+        <h3 className="text-lg font-semibold text-orange-600">
+          {profile.user.firstName} {profile.user.lastName}
+        </h3>
+      </header>
+      <div className="text-sm text-gray-600 mb-2">
+        <p>{profile.profession} • {profile.age} ans</p>
+        <p className="flex items-center" aria-label="Localisation">
+          <MapPin className="w-4 h-4 mr-1" />
+          {profile.location}
+        </p>
       </div>
-      <div className="p-4">
-        <header className="mb-2">
-          <span className="text-sm text-gray-600">{profile.type}</span>
-          <h3 className="text-lg font-semibold text-orange-600">{profile.name}</h3>
-        </header>
-        <div className="text-sm text-gray-600 mb-2">
-          <p>{profile.profession} • {profile.age} ans</p>
-          <p className="flex items-center" aria-label="Localisation">
-            <MapPin className="w-4 h-4 mr-1" />
-            {profile.location}
-          </p>
-        </div>
-        <p className="text-sm text-gray-700 mb-4 line-clamp-3">{profile.description}</p>
-        <button
-          className="w-full bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors"
-          aria-label={`Programmer un moment avec ${profile.name}`}
-        >
-          Programmer un moment
-        </button>
-      </div>
-    </article>
-  );
+      <p className="text-sm text-gray-700 mb-4 line-clamp-3">{profile.description}</p>
+      <button
+        className="w-full bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors"
+        aria-label={`Programmer un moment avec ${profile.user.firstName} ${profile.user.lastName}`}
+      >
+        Programmer un moment
+      </button>
+    </div>
+  </article>
+);
+
+
 
   return (
     <div className="min-h-screen bg-gray-50" lang="fr">

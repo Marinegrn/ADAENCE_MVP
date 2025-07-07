@@ -5,6 +5,7 @@ const { sendTestEmail } = require('./src/utils/mail');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
+const path = require('path');
 
 // Chargement variable d'env depuis .env 
 dotenv.config();
@@ -28,6 +29,8 @@ app.use(rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limite chaque IP à 100 requêtes
 }));
+// Permet de servir les fichiers du dossier "public"
+app.use('/public/images/seniors', express.static(path.join(__dirname, 'public/images/seniors')));
 
 // Routes
 const userRoutes = require('./src/routes/users');
