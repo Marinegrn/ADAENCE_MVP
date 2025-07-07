@@ -1,16 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const {
-  getAllUsers,
-  createUser,
-  updateUser,
-  deleteUser,
-} = require('../controllers/usersController');
+  getAllSlots,
+  createSlot,
+  updateSlot,
+  deleteSlot,
+} = require('../controllers/slotsController');
 
-router.get('/', getAllUsers);
-router.post('/', createUser);
-router.put('/:id', updateUser);
-router.patch('/:id', updateUser);
-router.delete('/:id', deleteUser);
+router.get('/', getAllSlots);
+router.post('/', createSlot);
+router.put('/:id', updateSlot);
+router.patch('/:id', updateSlot);
+router.delete('/:id', deleteSlot);
 
 module.exports = router;
+
