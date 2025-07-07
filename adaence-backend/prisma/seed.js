@@ -114,7 +114,7 @@ async function main() {
       age: 82,
       bio: "Aime la musique créole et les promenades en bord de mer.",
       location: "Fort-de-France, Martinique",
-      photo: null,
+      photo: "/assets/seniors/marielle.jpg",
       activities: ['Musique', 'Cuisine', 'Nature'],
       createdAt: new Date(),
       updatedAt: new Date(),
