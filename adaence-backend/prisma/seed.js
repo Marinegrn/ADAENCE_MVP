@@ -12,164 +12,25 @@ async function main() {
   await prisma.seniorProfile.deleteMany();
   await prisma.activity.deleteMany();
   await prisma.volunteerApplication.deleteMany();
+  await prisma.volunteer.deleteMany();
   await prisma.user.deleteMany();
 
   // USERS
   const usersData = [
-    {
-      id: uuidv4(),
-      email: 'robert.aine@paris.fr',
-      password: 'password123',
-      firstName: 'Robert',
-      lastName: 'Ainé',
-      phone: '+33123456789',
-      role: 'SENIOR',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      email: 'marielle.aine@martinique.fr',
-      password: 'password123',
-      firstName: 'Marielle',
-      lastName: 'Ainé',
-      phone: '+59698765432',
-      role: 'SENIOR',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      email: 'jean.aine@reunion.fr',
-      password: 'password123',
-      firstName: 'Jean',
-      lastName: 'Ainé',
-      phone: '+26212345678',
-      role: 'SENIOR',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      email: 'marie.benevole@guadeloupe.fr',
-      password: 'password123',
-      firstName: 'Marie',
-      lastName: 'Bénévole',
-      phone: '+590690123456',
-      role: 'VISITOR',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      email: 'sophie.benevole@mayotte.fr',
-      password: 'password123',
-      firstName: 'Sophie',
-      lastName: 'Bénévole',
-      phone: '+26263987654',
-      role: 'VISITOR',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      email: 'colette.aine@toulouse.fr',
-      password: 'password123',
-      firstName: 'Colette',
-      lastName: 'Ainé',
-      phone: '+33561616161',
-      role: 'SENIOR',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      email: 'lucien.aine@ajaccio.fr',
-      password: 'password123',
-      firstName: 'Lucien',
-      lastName: 'Ainé',
-      phone: '+33495556677',
-      role: 'SENIOR',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      email: 'emma.benevole@montpellier.fr',
-      password: 'password123',
-      firstName: 'Emma',
-      lastName: 'Bénévole',
-      phone: '+33467889900',
-      role: 'VISITOR',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      email: 'yanis.benevole@nancy.fr',
-      password: 'password123',
-      firstName: 'Yanis',
-      lastName: 'Bénévole',
-      phone: '+33383445566',
-      role: 'VISITOR',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      email: 'claire.benevole@saintmartin.fr',
-      password: 'password123',
-      firstName: 'Claire',
-      lastName: 'Bénévole',
-      phone: '+590590123456',
-      role: 'VISITOR',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      email: 'jacques.aine@brest.fr',
-      password: 'password123',
-      firstName: 'Jacques',
-      lastName: 'Ainé',
-      phone: '+33298765432',
-      role: 'SENIOR',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      email: 'aline.aine@guyane.fr',
-      password: 'password123',
-      firstName: 'Aline',
-      lastName: 'Ainé',
-      phone: '+33412345678',
-      role: 'SENIOR',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      email: 'gerard.benevole@bordeaux.fr',
-      password: 'password123',
-      firstName: 'Gérard',
-      lastName: 'Bénévole',
-      phone: '+33512345678',
-      role: 'VISITOR',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      email: 'malcolm.aine@saintmartin.fr',
-      password: 'password123',
-      firstName: 'Malcolm',
-      lastName: 'Ainé',
-      phone: '+33462599750',
-      role: 'SENIOR',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
+    { id: uuidv4(), email: 'robert.aine@paris.fr', password: 'password123', firstName: 'Robert', lastName: 'Ainé', phone: '+33123456789', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'marielle.aine@martinique.fr', password: 'password123', firstName: 'Marielle', lastName: 'Ainé', phone: '+59698765432', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'jean.aine@reunion.fr', password: 'password123', firstName: 'Jean', lastName: 'Ainé', phone: '+26212345678', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'marie.benevole@guadeloupe.fr', password: 'password123', firstName: 'Marie', lastName: 'Bénévole', phone: '+590690123456', role: 'VISITOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'sophie.benevole@mayotte.fr', password: 'password123', firstName: 'Sophie', lastName: 'Bénévole', phone: '+26263987654', role: 'VISITOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'colette.aine@toulouse.fr', password: 'password123', firstName: 'Colette', lastName: 'Ainé', phone: '+33561616161', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'lucien.aine@ajaccio.fr', password: 'password123', firstName: 'Lucien', lastName: 'Ainé', phone: '+33495556677', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'emma.benevole@montpellier.fr', password: 'password123', firstName: 'Emma', lastName: 'Bénévole', phone: '+33467889900', role: 'VISITOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'yanis.benevole@nancy.fr', password: 'password123', firstName: 'Yanis', lastName: 'Bénévole', phone: '+33383445566', role: 'VISITOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'claire.benevole@saintmartin.fr', password: 'password123', firstName: 'Claire', lastName: 'Bénévole', phone: '+590590123456', role: 'VISITOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'jacques.aine@brest.fr', password: 'password123', firstName: 'Jacques', lastName: 'Ainé', phone: '+33298765432', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'aline.aine@guyane.fr', password: 'password123', firstName: 'Aline', lastName: 'Ainé', phone: '+33412345678', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'gerard.benevole@bordeaux.fr', password: 'password123', firstName: 'Gérard', lastName: 'Bénévole', phone: '+33512345678', role: 'VISITOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'malcolm.aine@saintmartin.fr', password: 'password123', firstName: 'Malcolm', lastName: 'Ainé', phone: '+33462599750', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
   ];
 
   // Hash des mots de passe et insertion des users
@@ -193,7 +54,48 @@ async function main() {
     return user.id;
   }
 
-  // PROFILS SENIORS
+  // VOLUNTEERS
+  const volunteersData = [
+    {
+      id: uuidv4(),
+      userId: getUserIdByEmail('marie.benevole@guadeloupe.fr'),
+      age: 34,
+      bio: "Enthousiaste, j’aime aider et apprendre de nouvelles choses.",
+      location: "Pointe-à-Pitre, Guadeloupe",
+      availability: "Soirs et week-ends",
+      competences: ['Cuisine', 'Lecture', 'Écoute'],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: uuidv4(),
+      userId: getUserIdByEmail('sophie.benevole@mayotte.fr'),
+      age: 29,
+      bio: "Disponible les weekends, passionnée de culture antillaise.",
+      location: "Mamoudzou, Mayotte",
+      availability: "Week-ends uniquement",
+      competences: ['Accompagnement', 'Discussions', 'Musique'],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: uuidv4(),
+      userId: getUserIdByEmail('emma.benevole@montpellier.fr'),
+      age: 22,
+      bio: "Étudiante en médecine, j’aime discuter avec les aînés.",
+      location: "Montpellier, Occitanie",
+      availability: "Tous les après-midis",
+      competences: ['Soins', 'Écoute', 'Organisation'],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  ];
+
+  for (const volunteer of volunteersData) {
+    await prisma.volunteer.create({ data: volunteer });
+  }
+
+  // SENIOR PROFILES
   const seniorProfilesData = [
     {
       id: uuidv4(),
@@ -285,7 +187,7 @@ async function main() {
     },
   ];
 
-  // ACTIVITIES
+  // ACTIVITIES DATA - correspond aux activités possibles dans la table activities
   const activitiesData = [
     {
       id: uuidv4(),
@@ -306,7 +208,7 @@ async function main() {
     {
       id: uuidv4(),
       name: 'Marche',
-      description: 'Balade en plein air pour se dégourdir les jambes.',
+      description: 'Balade à pied pour profiter de la nature et discuter.',
       icon: '🚶‍♂️',
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -314,7 +216,7 @@ async function main() {
     {
       id: uuidv4(),
       name: 'Jeux de société',
-      description: 'Parties de jeux pour stimuler l’esprit et s’amuser.',
+      description: 'Activité ludique avec des jeux de société variés.',
       icon: '🎲',
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -322,29 +224,44 @@ async function main() {
     {
       id: uuidv4(),
       name: 'Cuisine',
-      description: 'Atelier cuisine pour partager des recettes et saveurs.',
+      description: 'Préparation et partage de recettes culinaires.',
       icon: '🍳',
       createdAt: new Date(),
       updatedAt: new Date(),
     },
   ];
 
-  // Création des activities avec IDs stockés
+  // On crée d'abord toutes les activités dans la base pour éviter problème de relation
   const activitiesMap = {};
-  for (const activity of activitiesData) {
-    const created = await prisma.activity.create({ data: activity });
-    activitiesMap[created.name] = created.id;
+  for (const act of activitiesData) {
+    const activity = await prisma.activity.create({ data: act });
+    activitiesMap[activity.name] = activity.id;
   }
 
-  // [BUG IMPORTANT] Correction pour les noms d'activités dans les seniorProfilesData :
-  // Les noms doivent correspondre EXACTEMENT aux noms dans activitiesMap, sinon erreur de connexion.
-  // Or dans seniorProfilesData, tu as par exemple 'Histoire', 'Musique classique', 'Échecs', 'Chant', 'Radio', 'Thé', 'Café', 'Promenade', 'Jeux de cartes', 'Chants marins', 'Cuisine locale'
-  // Or dans activitiesData, il n'y a que 'Café et discussion', 'Lecture', 'Marche', 'Jeux de société', 'Cuisine'.
-  // Il faut que ces noms correspondent, sinon ça va planter.
+  // Pour les autres activités non listées dans activitiesData mais présentes dans profils, on les ajoute aussi
+  const extraActivities = new Set();
+  for (const profile of seniorProfilesData) {
+    for (const act of profile.activities) {
+      if (!activitiesMap[act]) {
+        extraActivities.add(act);
+      }
+    }
+  }
+  for (const actName of extraActivities) {
+    const activity = await prisma.activity.create({
+      data: {
+        id: uuidv4(),
+        name: actName,
+        description: `${actName} description par défaut.`,
+        icon: '🎯',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
+    activitiesMap[activity.name] = activity.id;
+  }
 
-  // Garder tes données et de corriger la connexion comme suit : 
-  // Si le nom d'activité du profil senior n'existe pas dans activitiesMap, on l'ignore pour éviter crash.
-
+  // Création des profils seniors avec connexion vers activités existantes
   for (const profile of seniorProfilesData) {
     const activitiesConnect = profile.activities
       .map(name => activitiesMap[name])
@@ -368,122 +285,123 @@ async function main() {
     });
   }
 
+  // Helper pour récupérer le profil senior par userId
+  async function getSeniorProfileIdByUserId(userId) {
+    const profile = await prisma.seniorProfile.findUnique({ where: { userId } });
+    if (!profile) throw new Error('SeniorProfile introuvable pour userId ' + userId);
+    return profile.id;
+  }
+
   // VOLUNTEER APPLICATIONS
 const volunteerApplicationsData = [
   {
     id: uuidv4(),
+    // volunteerId: volunteersData[0].id, // Marie Bénévole
     firstName: 'Marie',
     lastName: 'Bénévole',
-    email: 'marie.benevole@guadeloupe.fr',
-    phone: '+590690123456',
-    age: 32,
-    location: 'Pointe-à-Pitre, Guadeloupe',
-    motivation: 'J’aime aider les personnes âgées et passer du temps avec elles.',
-    availability: 'Lundis et mercredis après-midi',
-    experience: 'Aide à domicile pendant 2 ans',
+    email: 'marie.benevole@guadeloupe.fr',  // à ajuster si tu as usersData
+    phone: '0690-123-456', // exemple de téléphone, modifie si tu veux
+    age: volunteersData[0].age,
+    location: volunteersData[0].location,
+    motivation: "J'aime aider les autres et je suis très motivée à m'impliquer.", // tu peux adapter
+    availability: volunteersData[0].availability,
+    experience: "Bénévolat dans des associations locales", // exemple, à adapter
     status: 'PENDING',
     createdAt: new Date(),
+    // updatedAt: new Date(),
   },
   {
     id: uuidv4(),
+    // volunteerId: volunteersData[1].id, // Sophie Bénévole
     firstName: 'Sophie',
     lastName: 'Bénévole',
     email: 'sophie.benevole@mayotte.fr',
-    phone: '+26263987654',
-    age: 28,
-    location: 'Mamoudzou, Mayotte',
-    motivation: 'Le bénévolat me tient à cœur, je souhaite apporter mon soutien.',
-    availability: 'Samedis toute la journée',
-    experience: 'Animation d’ateliers en maison de retraite',
+    phone: '0691-987-654',
+    age: volunteersData[1].age,
+    location: volunteersData[1].location,
+    motivation: "Passionnée par la culture antillaise et prête à m'investir.", 
+    availability: volunteersData[1].availability,
+    experience: "Organisation d'événements culturels",
     status: 'APPROVED',
     createdAt: new Date(),
+    // updatedAt: new Date(),
   },
   {
     id: uuidv4(),
+    // volunteerId: volunteersData[2].id, // Emma Bénévole
     firstName: 'Emma',
     lastName: 'Bénévole',
     email: 'emma.benevole@montpellier.fr',
-    phone: '+33467889900',
-    age: 25,
-    location: 'Montpellier, Occitanie',
-    motivation: 'J’aimerais contribuer à la communauté et rencontrer de nouvelles personnes.',
-    availability: 'Soirs en semaine',
-    experience: null,
+    phone: '0692-456-789',
+    age: volunteersData[2].age,
+    location: volunteersData[2].location,
+    motivation: "Étudiante en médecine, j’aime discuter avec les aînés.",
+    availability: volunteersData[2].availability,
+    experience: "Stage en centre hospitalier",
     status: 'REJECTED',
     createdAt: new Date(),
+    // updatedAt: new Date(),
   },
 ];
 
+
   for (const app of volunteerApplicationsData) {
-    await prisma.volunteerApplication.create({
-      data: {
-        ...app,
-        // updatedAt: app.createdAt, // Ajoute updatedAt pour cohérence avec le modèle
-      },
-    });
+    await prisma.volunteerApplication.create({ data: app });
   }
 
   // AVAILABLE SLOTS
   const availableSlotsData = [
     {
       id: uuidv4(),
-      seniorId: getUserIdByEmail('robert.aine@paris.fr'),
+      seniorId: await getSeniorProfileIdByUserId(getUserIdByEmail('robert.aine@paris.fr')),
       date: new Date('2025-07-07T09:00:00Z'),
-      duration: 60,
+      // duration: 60,
+      startTime: '09:00',
+      endTime: '10:00',
+      activity: 'Café et discussion',
       isBooked: false,
       createdAt: new Date(),
-      updatedAt: new Date(),
+      // updatedAt: new Date(),
     },
     {
       id: uuidv4(),
-      seniorId: getUserIdByEmail('marielle.aine@martinique.fr'),
-      date: new Date('2025-07-08T10:00:00Z'),
-      duration: 45,
-      isBooked: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      seniorId: getUserIdByEmail('jean.aine@reunion.fr'),
+      seniorId: await getSeniorProfileIdByUserId(getUserIdByEmail('jean.aine@reunion.fr')),
       date: new Date('2025-07-09T14:00:00Z'),
-      duration: 30,
+      // duration: 60,
+      startTime: '14:00',
+      endTime: '15:00',
+      activity: 'Marche',
       isBooked: false,
       createdAt: new Date(),
-      updatedAt: new Date(),
+      // updatedAt: new Date(),
+    },
+    {
+      id: uuidv4(),
+      seniorId: await getSeniorProfileIdByUserId(getUserIdByEmail('marielle.aine@martinique.fr')),
+      date: new Date('2025-07-10T10:00:00Z'),
+      // duration: 45,
+      startTime: '10:00',
+      endTime: '10:45',
+      activity: 'Lecture',
+      isBooked: false,
+      createdAt: new Date(),
+      // updatedAt: new Date(),
     },
   ];
 
   for (const slot of availableSlotsData) {
-    await prisma.availableSlot.create({
-      data: {
-        id: slot.id,
-        seniorId: slot.seniorId,
-        date: new Date(slot.date),
-        duration: slot.duration,
-        isBooked: slot.isBooked,
-        createdAt: new Date(slot.createdAt),
-        updatedAt: new Date(slot.updatedAt),
-        startTime: slot.startTime, // Retiré car non défini dans availableSlotsData
-      }
-    });
+    await prisma.availableSlot.create({ data: slot });
   }
 
-  // BOOKINGS
-  // Exemple: Emma (benevole) réserve un créneau de Robert (senior)
-  // Pour cela, on récupère les ids correspondants
-
-  // [BUG IMPORTANT!] Attention ici: availableSlotsData contient les IDs qu'on vient de générer, mais ils ne correspondent pas aux IDs en base car on a fait des create.
-  // Pour que le booking référence bien un créneau en base, il faut récupérer le créneau en base et utiliser son ID.
-
-  // Solution simple: après insertion, récupérer tous les créneaux et faire la correspondance.
-
+  // Récupérer tous les créneaux pour réservation
   const createdSlots = await prisma.availableSlot.findMany();
 
-  // Trouver le créneau de Robert à '2025-07-07T09:00:00Z'
+  // Trouver le créneau de Robert à '2025-07-07T09:00:00Z' en comparant bien seniorId avec seniorProfileId
+  const robertSeniorId = await getSeniorProfileIdByUserId(getUserIdByEmail('robert.aine@paris.fr'));
+
   const robertSlot = createdSlots.find(
     slot =>
-      slot.seniorId === getUserIdByEmail('robert.aine@paris.fr') &&
+      slot.seniorId === robertSeniorId &&
       slot.date.toISOString() === '2025-07-07T09:00:00.000Z'
   );
 
@@ -491,11 +409,13 @@ const volunteerApplicationsData = [
     throw new Error("Créneau de Robert introuvable");
   }
 
+  // BOOKINGS
   const bookingData = [
     {
       id: uuidv4(),
       visitorId: getUserIdByEmail('emma.benevole@montpellier.fr'),
-      availableSlotId: robertSlot.id,
+      slotId: robertSlot.id,
+      seniorId: robertSlot.seniorId,
       status: 'CONFIRMED',
       createdAt: new Date(),
       updatedAt: new Date(),
