@@ -25,8 +25,9 @@ model User {
   updatedAt DateTime @updatedAt
   role      Role     @default(VISITOR)
   
-  // Profil senior
+  // Relations
   seniorProfile SeniorProfile?
+  volunteer     Volunteer? 
   
   // Réservations faites
   bookings Booking[]
@@ -34,36 +35,55 @@ model User {
   @@map("users")
 }
 
+model Volunteer {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  age            Int?
+  bio            String?
+  location       String?
+  availability   String?
+  competences    String[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("volunteers")
+}
+
+
 model SeniorProfile {
-  id          String   @id @default(cuid())
-  userId      String   @unique
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String     @id @default(cuid())
+  userId      String     @unique
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   age         Int
   bio         String
   location    String
   photo       String?
-  activities  String[] // Array of activity IDs
+
+  // Relations Many-to-Many avec Activity
+activities  Activity[] @relation("SeniorActivities")
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // Créneaux disponibles
   availableSlots AvailableSlot[]
-  
-  // Réservations reçues
-  bookings Booking[]
+  bookings       Booking[]
   
   @@map("senior_profiles")
 }
 
 model Activity {
-  id          String   @id @default(cuid())
+  id          String          @id @default(cuid())
   name        String
   description String
   icon        String
-  createdAt   DateTime @default(now())
-  
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt 
+
+  // Relation inverse Many-to-Many
+  seniors     SeniorProfile[] @relation("SeniorActivities")
+
   @@map("activities")
 }
 

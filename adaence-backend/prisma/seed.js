@@ -1,5 +1,4 @@
-// DATA TEST
-const { PrismaClient } = require('../src/generated/prisma');
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcryptjs');
@@ -11,10 +10,11 @@ async function main() {
   await prisma.booking.deleteMany();
   await prisma.availableSlot.deleteMany();
   await prisma.seniorProfile.deleteMany();
-  await prisma.activity.deleteMany(); 
+  await prisma.activity.deleteMany();
   await prisma.volunteerApplication.deleteMany();
   await prisma.user.deleteMany();
 
+  // USERS
   const usersData = [
     {
       id: uuidv4(),
@@ -169,7 +169,7 @@ async function main() {
       role: 'SENIOR',
       createdAt: new Date(),
       updatedAt: new Date(),
-    },  
+    },
   ];
 
   // Hash des mots de passe et insertion des users
@@ -183,10 +183,10 @@ async function main() {
     });
   }
 
-  // Récupère à nouveau tous les users pour récupérer leurs IDs (au cas où)
+  // Récupérer tous les users pour avoir les IDs
   const users = await prisma.user.findMany();
 
-  // Construire un helper pour retrouver un user par email
+  // Helper pour retrouver un user par email
   function getUserIdByEmail(email) {
     const user = users.find(u => u.email === email);
     if (!user) throw new Error(`Utilisateur introuvable avec l'email: ${email}`);
@@ -283,12 +283,7 @@ async function main() {
       createdAt: new Date(),
       updatedAt: new Date(),
     },
-
   ];
-
-  for (const profile of seniorProfilesData) {
-    await prisma.seniorProfile.create({ data: profile });
-  }
 
   // ACTIVITIES
   const activitiesData = [
@@ -298,194 +293,164 @@ async function main() {
       description: 'Moment convivial autour d’un café pour échanger.',
       icon: '☕️',
       createdAt: new Date(),
+      updatedAt: new Date(),
     },
     {
       id: uuidv4(),
-      name: 'Promenade au parc',
-      description: 'Balade relaxante dans un parc du quartier.',
-      icon: '🌳',
+      name: 'Lecture',
+      description: 'Partage d’une lecture ou discussion sur des livres.',
+      icon: '📚',
       createdAt: new Date(),
+      updatedAt: new Date(),
     },
     {
       id: uuidv4(),
-      name: 'Atelier cuisine',
-      description: 'Découverte de recettes traditionnelles françaises et ultramarines.',
-      icon: '🍳',
+      name: 'Marche',
+      description: 'Balade en plein air pour se dégourdir les jambes.',
+      icon: '🚶‍♂️',
       createdAt: new Date(),
+      updatedAt: new Date(),
     },
     {
       id: uuidv4(),
       name: 'Jeux de société',
-      description: 'Partie de jeux pour s’amuser ensemble.',
+      description: 'Parties de jeux pour stimuler l’esprit et s’amuser.',
       icon: '🎲',
       createdAt: new Date(),
+      updatedAt: new Date(),
     },
     {
       id: uuidv4(),
-      name: 'Chants traditionnels',
-      description: 'Chanter ensemble des chansons anciennes et populaires.',
-      icon: '🎤',
+      name: 'Cuisine',
+      description: 'Atelier cuisine pour partager des recettes et saveurs.',
+      icon: '🍳',
       createdAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      name: 'Écoute de musique / radio',
-      description: 'Moment calme autour d’une sélection musicale ou radiophonique.',
-      icon: '📻',
-      createdAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      name: 'Dégustation de thé',
-      description: 'Dégustation conviviale de thés du monde.',
-      icon: '🍵',
-      createdAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      name: 'Discussion en terrasse',
-      description: 'Partager un moment social en extérieur, sur une terrasse ou un jardin.',
-      icon: '🪴',
-      createdAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      name: 'Jeux de cartes',
-      description: 'Belote, rami, tarot… les grands classiques en petit groupe.',
-      icon: '🃏',
-      createdAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      name: 'Balade nature',
-      description: 'Se promener dans des espaces naturels ou jardins botaniques.',
-      icon: '🌿',
-      createdAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      name: 'Lecture de contes',
-      description: 'Moments de lecture partagée autour de contes ou récits traditionnels.',
-      icon: '📖',
-      createdAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      name: 'Cuisine locale',
-      description: 'Ateliers de préparation de plats régionaux et ultramarins.',
-      icon: '🥘',
-      createdAt: new Date(),
+      updatedAt: new Date(),
     },
   ];
 
+  // Création des activities avec IDs stockés
+  const activitiesMap = {};
   for (const activity of activitiesData) {
-    await prisma.activity.create({ data: activity });
+    const created = await prisma.activity.create({ data: activity });
+    activitiesMap[created.name] = created.id;
   }
 
-  // Récupérer les profils seniors et activités insérés
-  const seniors = await prisma.seniorProfile.findMany();
+  // [BUG IMPORTANT] Correction pour les noms d'activités dans les seniorProfilesData :
+  // Les noms doivent correspondre EXACTEMENT aux noms dans activitiesMap, sinon erreur de connexion.
+  // Or dans seniorProfilesData, tu as par exemple 'Histoire', 'Musique classique', 'Échecs', 'Chant', 'Radio', 'Thé', 'Café', 'Promenade', 'Jeux de cartes', 'Chants marins', 'Cuisine locale'
+  // Or dans activitiesData, il n'y a que 'Café et discussion', 'Lecture', 'Marche', 'Jeux de société', 'Cuisine'.
+  // Il faut que ces noms correspondent, sinon ça va planter.
 
-  // AVAILABLE SLOTS (créneaux seniors disponibles pour activités)
+  // Garder tes données et de corriger la connexion comme suit : 
+  // Si le nom d'activité du profil senior n'existe pas dans activitiesMap, on l'ignore pour éviter crash.
+
+  for (const profile of seniorProfilesData) {
+    const activitiesConnect = profile.activities
+      .map(name => activitiesMap[name])
+      .filter(id => id !== undefined)
+      .map(id => ({ id }));
+
+    await prisma.seniorProfile.create({
+      data: {
+        id: profile.id,
+        userId: profile.userId,
+        age: profile.age,
+        bio: profile.bio,
+        location: profile.location,
+        photo: profile.photo,
+        createdAt: profile.createdAt,
+        updatedAt: profile.updatedAt,
+        activities: {
+          connect: activitiesConnect,
+        },
+      },
+    });
+  }
+
+  // VOLUNTEER APPLICATIONS
+const volunteerApplicationsData = [
+  {
+    id: uuidv4(),
+    firstName: 'Marie',
+    lastName: 'Bénévole',
+    email: 'marie.benevole@guadeloupe.fr',
+    phone: '+590690123456',
+    age: 32,
+    location: 'Pointe-à-Pitre, Guadeloupe',
+    motivation: 'J’aime aider les personnes âgées et passer du temps avec elles.',
+    availability: 'Lundis et mercredis après-midi',
+    experience: 'Aide à domicile pendant 2 ans',
+    status: 'PENDING',
+    createdAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    firstName: 'Sophie',
+    lastName: 'Bénévole',
+    email: 'sophie.benevole@mayotte.fr',
+    phone: '+26263987654',
+    age: 28,
+    location: 'Mamoudzou, Mayotte',
+    motivation: 'Le bénévolat me tient à cœur, je souhaite apporter mon soutien.',
+    availability: 'Samedis toute la journée',
+    experience: 'Animation d’ateliers en maison de retraite',
+    status: 'APPROVED',
+    createdAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    firstName: 'Emma',
+    lastName: 'Bénévole',
+    email: 'emma.benevole@montpellier.fr',
+    phone: '+33467889900',
+    age: 25,
+    location: 'Montpellier, Occitanie',
+    motivation: 'J’aimerais contribuer à la communauté et rencontrer de nouvelles personnes.',
+    availability: 'Soirs en semaine',
+    experience: null,
+    status: 'REJECTED',
+    createdAt: new Date(),
+  },
+];
+
+for (const app of volunteerApplicationsData) {
+  await prisma.volunteerApplication.create({ data: app });
+}
+
+
+  for (const app of volunteerApplicationsData) {
+    await prisma.volunteerApplication.create({ data: app });
+  }
+
+  // AVAILABLE SLOTS
   const availableSlotsData = [
     {
       id: uuidv4(),
-      seniorId: seniors.find(s => s.userId === getUserIdByEmail('lucien.aine@ajaccio.fr')).id,
-      date: new Date('2025-07-10'),
-      startTime: '09:00',
-      endTime: '11:00',
-      activity: 'Café et discussion',
+      seniorId: getUserIdByEmail('robert.aine@paris.fr'),
+      date: new Date('2025-07-07T09:00:00Z'),
+      duration: 60,
       isBooked: false,
       createdAt: new Date(),
+      updatedAt: new Date(),
     },
     {
       id: uuidv4(),
-      seniorId: seniors.find(s => s.userId === getUserIdByEmail('marielle.aine@martinique.fr')).id,
-      date: new Date('2025-07-11'),
-      startTime: '14:00',
-      endTime: '16:00',
-      activity: 'Promenade au parc',
+      seniorId: getUserIdByEmail('marielle.aine@martinique.fr'),
+      date: new Date('2025-07-08T10:00:00Z'),
+      duration: 45,
       isBooked: false,
       createdAt: new Date(),
+      updatedAt: new Date(),
     },
     {
       id: uuidv4(),
-      seniorId: seniors.find(s => s.userId === getUserIdByEmail('jean.aine@reunion.fr')).id,
-      date: new Date('2025-07-12'),
-      startTime: '10:00',
-      endTime: '12:00',
-      activity: 'Atelier cuisine',
+      seniorId: getUserIdByEmail('jean.aine@reunion.fr'),
+      date: new Date('2025-07-09T14:00:00Z'),
+      duration: 30,
       isBooked: false,
       createdAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      seniorId: seniors.find(s => s.userId === getUserIdByEmail('jacques.aine@brest.fr')).id,
-      date: new Date('2025-07-15'),
-      startTime: '15:00',
-      endTime: '17:00',
-      activity: 'Balade nature',
-      isBooked: false,
-      createdAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      seniorId: seniors.find(s => s.userId === getUserIdByEmail('lucien.aine@ajaccio.fr')).id,
-      date: new Date('2025-07-18'),
-      startTime: '10:00',
-      endTime: '11:30',
-      activity: 'Jeux de cartes',
-      isBooked: false,
-      createdAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      seniorId: seniors.find(s => s.userId === getUserIdByEmail('marielle.aine@martinique.fr')).id,
-      date: new Date('2025-07-20'),
-      startTime: '16:00',
-      endTime: '18:00',
-      activity: 'Chants traditionnels',
-      isBooked: false,
-      createdAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      seniorId: seniors.find(s => s.userId === getUserIdByEmail('aline.aine@guyane.fr')).id,
-      date: new Date('2025-07-22'),
-      startTime: '09:00',
-      endTime: '11:00',
-      activity: 'Cuisine locale',
-      isBooked: false,
-      createdAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      seniorId: seniors.find(s => s.userId === getUserIdByEmail('colette.aine@toulouse.fr')).id,
-      date: new Date('2025-07-25'),
-      startTime: '14:30',
-      endTime: '16:30',
-      activity: 'Écoute de musique / radio',
-      isBooked: false,
-      createdAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      seniorId: seniors.find(s => s.userId === getUserIdByEmail('robert.aine@paris.fr')).id,
-      date: new Date('2025-07-27'),
-      startTime: '11:00',
-      endTime: '12:00',
-      activity: 'Discussion en terrasse',
-      isBooked: false,
-      createdAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      seniorId: seniors.find(s => s.userId === getUserIdByEmail('malcolm.aine@saintmartin.fr')).id,
-      date: new Date('2025-08-03'),
-      startTime: '14:00',
-      endTime: '15:00',
-      activity: 'Balade nature',
-      isBooked: false,
-      createdAt: new Date(),
+      updatedAt: new Date(),
     },
   ];
 
@@ -493,92 +458,54 @@ async function main() {
     await prisma.availableSlot.create({ data: slot });
   }
 
-  // Récupérer les créneaux disponibles
-  const slots = await prisma.availableSlot.findMany();
+  // BOOKINGS
+  // Exemple: Emma (benevole) réserve un créneau de Robert (senior)
+  // Pour cela, on récupère les ids correspondants
 
-  // BOOKINGS (réservations par bénévoles — visitorId = bénévole, seniorId, slotId)
-  const bookingsData = [
-    {
-      id: uuidv4(),
-      visitorId: getUserIdByEmail('marie.benevole@guadeloupe.fr'),
-      seniorId: seniors.find(s => s.userId === getUserIdByEmail('robert.aine@paris.fr')).id,
-      slotId: slots[0].id,
-      message: 'Hâte de partager un moment convivial !',
-      status: 'CONFIRMED',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      visitorId: getUserIdByEmail('sophie.benevole@mayotte.fr'),
-      seniorId: seniors.find(s => s.userId === getUserIdByEmail('marielle.aine@martinique.fr')).id,
-      slotId: slots[1].id,
-      message: 'Promenade au parc, ça va être top !',
-      status: 'PENDING',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      visitorId: getUserIdByEmail('claire.benevole@saintmartin.fr'),
-      seniorId: seniors.find( s => s.userId === getUserIdByEmail('malcolm.aine@saintmartin.fr')).id,
-      slotId: slots[9].id,
-      message: 'Super journée pour découvrir la faune et flore !',
-      status: 'CONFIRMED',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }
-  ];
+  // [BUG IMPORTANT!] Attention ici: availableSlotsData contient les IDs qu'on vient de générer, mais ils ne correspondent pas aux IDs en base car on a fait des create.
+  // Pour que le booking référence bien un créneau en base, il faut récupérer le créneau en base et utiliser son ID.
 
-  for (const booking of bookingsData) {
-    await prisma.booking.create({ data: booking });
+  // Solution simple: après insertion, récupérer tous les créneaux et faire la correspondance.
+
+  const createdSlots = await prisma.availableSlot.findMany();
+
+  // Trouver le créneau de Robert à '2025-07-07T09:00:00Z'
+  const robertSlot = createdSlots.find(
+    slot =>
+      slot.seniorId === getUserIdByEmail('robert.aine@paris.fr') &&
+      slot.date.toISOString() === '2025-07-07T09:00:00.000Z'
+  );
+
+  if (!robertSlot) {
+    throw new Error("Créneau de Robert introuvable");
   }
 
-  // VOLUNTEER APPLICATIONS (candidatures bénévoles - séparées des users)
-  const volunteerApplicationsData = [
+  const bookingData = [
     {
       id: uuidv4(),
-      firstName: 'Marie',
-      lastName: 'Lemoine',
-      email: 'marie.benevole@guadeloupe.fr',
-      phone: '+590690123456',
-      age: 28,
-      location: 'Pointe-à-Pitre, Guadeloupe',
-      motivation: "J'aime aider les personnes âgées et partager des moments conviviaux.",
-      availability: 'Week-ends et soirées',
-      experience: '2 ans en maison de retraite',
-      status: 'APPROVED',
+      visitorId: getUserIdByEmail('emma.benevole@montpellier.fr'),
+      availableSlotId: robertSlot.id,
+      status: 'CONFIRMED',
       createdAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      firstName: 'Lucas',
-      lastName: 'Martin',
-      email: 'lucas.martin@paris.fr',
-      phone: '+33101567890',
-      age: 26,
-      location: 'Paris, Île-de-France',
-      motivation: "Je souhaite m'engager dans des activités de solidarité locale.",
-      availability: 'Mercredis après-midi',
-      experience: 'Bénévole dans une association locale',
-      status: 'PENDING',
-      createdAt: new Date(),
+      updatedAt: new Date(),
     },
   ];
 
-  for (const app of volunteerApplicationsData) {
-    await prisma.volunteerApplication.create({ data: app });
+  for (const booking of bookingData) {
+    await prisma.booking.create({ data: booking });
   }
 
   console.log('✅ Seed terminé avec succès !');
 }
 
 main()
-  .catch((e) => {
-    console.error('❌ Erreur durant le seed :', e);
+  .catch(e => {
+    console.error(e);
     process.exit(1);
   })
   .finally(async () => {
     await prisma.$disconnect();
   });
+
+
 

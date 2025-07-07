@@ -5,7 +5,7 @@ import { Search, Edit, Share2, Heart, Facebook, Instagram, Youtube, Twitter } fr
 
 export default function Navbar() {
   return (
-    <header className="bg-white shadow-sm border-b">
+    <header role="banner" className="bg-white shadow-sm border-b">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -35,9 +35,11 @@ export default function Navbar() {
           </nav>
 
           {/* Bouton don */}
+          <Link href="/donation">
           <button className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
             Faire un don ❤️
           </button>
+          </Link>
         </div>
       </div>
     </header>
