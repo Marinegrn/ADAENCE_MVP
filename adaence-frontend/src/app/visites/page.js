@@ -49,7 +49,7 @@ const ProfileCard = ({ profile, onClick }) => (
   >
     <div className="relative w-full h-48">
       <Image
-        src={`http://localhost:5000/public/images/seniors/${profile.photo ? profile.photo : 'default.jpg'}`}
+        src={`http://localhost:5000/public/${profile.photo ? profile.photo : 'images/seniors/default.jpg'}`}
         alt={`Portrait de ${profile.user.firstName} ${profile.user.lastName}`}
         fill
         className="object-cover"
@@ -80,8 +80,6 @@ const ProfileCard = ({ profile, onClick }) => (
     </div>
   </article>
 );
-
-
 
   return (
     <div className="min-h-screen bg-gray-50" lang="fr">

@@ -35,7 +35,7 @@ console.log('__dirname:', __dirname);
 console.log('Dossier public:', path.join(__dirname, 'public'));
 
 // Servir le dossier public (important : le dossier public lui-même)
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Routes
 const userRoutes = require('./src/routes/users');
