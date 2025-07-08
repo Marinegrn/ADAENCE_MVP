@@ -17,20 +17,20 @@ async function main() {
 
   // USERS
   const usersData = [
-    { id: uuidv4(), email: 'robert.aine@paris.fr', password: 'password123', firstName: 'Robert', lastName: 'Ainé', phone: '+33123456789', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
-    { id: uuidv4(), email: 'marielle.aine@martinique.fr', password: 'password123', firstName: 'Marielle', lastName: 'Ainé', phone: '+59698765432', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
-    { id: uuidv4(), email: 'jean.aine@reunion.fr', password: 'password123', firstName: 'Jean', lastName: 'Ainé', phone: '+26212345678', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'robert.aine@paris.fr', password: 'password123', firstName: 'Robert', lastName: 'Moreau-Berthier', phone: '+33123456789', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'marielle.aine@martinique.fr', password: 'password123', firstName: 'Marielle', lastName: 'Kaloani', phone: '+59698765432', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'jean.aine@reunion.fr', password: 'password123', firstName: 'Jean', lastName: 'Bachirou', phone: '+26212345678', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
     { id: uuidv4(), email: 'marie.benevole@guadeloupe.fr', password: 'password123', firstName: 'Marie', lastName: 'Bénévole', phone: '+590690123456', role: 'VISITOR', createdAt: new Date(), updatedAt: new Date() },
     { id: uuidv4(), email: 'sophie.benevole@mayotte.fr', password: 'password123', firstName: 'Sophie', lastName: 'Bénévole', phone: '+26263987654', role: 'VISITOR', createdAt: new Date(), updatedAt: new Date() },
-    { id: uuidv4(), email: 'colette.aine@toulouse.fr', password: 'password123', firstName: 'Colette', lastName: 'Ainé', phone: '+33561616161', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
-    { id: uuidv4(), email: 'lucien.aine@ajaccio.fr', password: 'password123', firstName: 'Lucien', lastName: 'Ainé', phone: '+33495556677', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'colette.aine@toulouse.fr', password: 'password123', firstName: 'Colette', lastName: 'Chambret', phone: '+33561616161', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'lucien.aine@ajaccio.fr', password: 'password123', firstName: 'Lucien', lastName: 'Santarelli', phone: '+33495556677', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
     { id: uuidv4(), email: 'emma.benevole@montpellier.fr', password: 'password123', firstName: 'Emma', lastName: 'Bénévole', phone: '+33467889900', role: 'VISITOR', createdAt: new Date(), updatedAt: new Date() },
     { id: uuidv4(), email: 'yanis.benevole@nancy.fr', password: 'password123', firstName: 'Yanis', lastName: 'Bénévole', phone: '+33383445566', role: 'VISITOR', createdAt: new Date(), updatedAt: new Date() },
     { id: uuidv4(), email: 'claire.benevole@saintmartin.fr', password: 'password123', firstName: 'Claire', lastName: 'Bénévole', phone: '+590590123456', role: 'VISITOR', createdAt: new Date(), updatedAt: new Date() },
-    { id: uuidv4(), email: 'jacques.aine@brest.fr', password: 'password123', firstName: 'Jacques', lastName: 'Ainé', phone: '+33298765432', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
-    { id: uuidv4(), email: 'aline.aine@guyane.fr', password: 'password123', firstName: 'Aline', lastName: 'Ainé', phone: '+33412345678', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'jacques.aine@brest.fr', password: 'password123', firstName: 'Jacques', lastName: 'Verneuil', phone: '+33298765432', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'aline.aine@guyane.fr', password: 'password123', firstName: 'Aline', lastName: 'Saminadin', phone: '+33412345678', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
     { id: uuidv4(), email: 'gerard.benevole@bordeaux.fr', password: 'password123', firstName: 'Gérard', lastName: 'Bénévole', phone: '+33512345678', role: 'VISITOR', createdAt: new Date(), updatedAt: new Date() },
-    { id: uuidv4(), email: 'malcolm.aine@saintmartin.fr', password: 'password123', firstName: 'Malcolm', lastName: 'Ainé', phone: '+33462599750', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
+    { id: uuidv4(), email: 'malcolm.aine@saintmartin.fr', password: 'password123', firstName: 'Malcolm', lastName: 'Georges dit Belmont', phone: '+33462599750', role: 'SENIOR', createdAt: new Date(), updatedAt: new Date() },
   ];
 
   // Hash des mots de passe et insertion des users
