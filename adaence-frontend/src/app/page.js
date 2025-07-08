@@ -22,6 +22,7 @@ const AdaenceLandingPage = () => {
 
 const router = useRouter();
 
+// Fonction de filtrage depuis la barre de recherche
 const handleSearch = () => {
   const queryParams = new URLSearchParams({
     moment: formData.momentPartage.trim(),
