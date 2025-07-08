@@ -29,8 +29,13 @@ app.use(rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limite chaque IP à 100 requêtes
 }));
-// Permet de servir les fichiers du dossier "public"
-app.use('/public/images/seniors', express.static(path.join(__dirname, 'public/images/seniors')));
+
+// TEST - uploads Photos
+console.log('__dirname:', __dirname);
+console.log('Dossier public:', path.join(__dirname, 'public'));
+
+// Servir le dossier public (important : le dossier public lui-même)
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 const userRoutes = require('./src/routes/users');
