@@ -159,14 +159,14 @@ const ProfileCard = ({ profile, onClick }) => (
               />
             </div>
             <div className="flex items-end">
-              <button
+              {/* <button // plus besoin car real-time / Live filtering
                 type="submit"
                 className="w-full bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center"
                 aria-label="Rechercher des moments disponibles"
               >
                 <Search className="w-4 h-4 mr-2" />
                 Rechercher
-              </button>
+              </button> */}
             </div>
           </form>
           <p className="mt-4 text-sm text-gray-600" aria-live="polite">
