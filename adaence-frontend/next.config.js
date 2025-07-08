@@ -10,11 +10,10 @@ const nextConfig = {
         protocol: 'http',
         hostname: 'localhost',
         port: '5000',
-        pathname: '/public/images/seniors/**',
+        pathname: '/public/**', // de /public/images/seniors/** à /public/**
       },
     ],
   },
 };
-
 module.exports = nextConfig;
 

@@ -41,6 +41,18 @@ const AdaenceVisitPage = () => {
     return matchMoment && matchLocation;
   });
 
+const getImageUrl = (photo) => {
+    if (!photo) return 'http://localhost:5000/public/images/seniors/default.jpg';
+  
+  // Si le chemin contient déjà 'images/', on l'utilise tel quel
+    if (photo.includes('images/')) {
+      return `http://localhost:5000/public/${photo}`;
+    }
+  
+  // Sinon, on ajoute le préfixe images/seniors/
+      return `http://localhost:5000/public/images/seniors/${photo}`;
+};
+
 const ProfileCard = ({ profile, onClick }) => (
   <article
     className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
@@ -49,7 +61,7 @@ const ProfileCard = ({ profile, onClick }) => (
   >
     <div className="relative w-full h-48">
       <Image
-        src={`http://localhost:5000/public/${profile.photo ? profile.photo : 'images/seniors/default.jpg'}`}
+        src={getImageUrl(profile.photo)} // important pour la structure conditionnelle de la variable getImageUrl
         alt={`Portrait de ${profile.user.firstName} ${profile.user.lastName}`}
         fill
         className="object-cover"
