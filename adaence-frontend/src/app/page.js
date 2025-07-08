@@ -36,16 +36,16 @@ const handleSearch = () => {
     // Nav/Action à définir
   };
 
-  // Profils TEST Front - Maquette de base
+  // Profils du grid juste à afficher
   const profils = [
-    { id: 1, name: "Marie", age: 78, image: "https://placehold.co/300x400" },
-    { id: 2, name: "Pierre", age: 82, image: "https://placehold.co/300x400" },
-    { id: 3, name: "Jeanne", age: 75, image: "https://placehold.co/300x400" },
-    { id: 4, name: "Henri", age: 80, image: "https://placehold.co/300x400" },
-    { id: 5, name: "Colette", age: 77, image: "https://placehold.co/300x400" },
-    { id: 6, name: "André", age: 84, image: "https://placehold.co/300x400" },
-    { id: 7, name: "Simone", age: 79, image: "https://placehold.co/300x400" },
-    { id: 8, name: "Marcel", age: 81, image: "https://placehold.co/300x400" }
+    { id: 1, name: "Marie", age: 78, image: "/assets/marie.jpg" },
+    { id: 2, name: "Pierre", age: 82, image: "/assets/pierre.jpg" },
+    { id: 3, name: "Jeanne", age: 75, image: "/assets/jeanne.jpg" },
+    { id: 4, name: "Henri", age: 80, image: "/assets/henri.jpg" },
+    { id: 5, name: "Claudine", age: 77, image: "/assets/claudine.jpg" },
+    { id: 6, name: "André", age: 84, image: "/assets/andre.jpg" },
+    { id: 7, name: "Tâm", age: 79, image: "/assets/tam.jpg" },
+    { id: 8, name: "Marcel", age: 81, image: "/assets/marcel.jpg" }
   ];
 
   return (
