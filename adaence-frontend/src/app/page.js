@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Head from 'next/head';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Search, Edit, Share2, Heart, Facebook, Instagram, Youtube, Twitter } from 'lucide-react';
 import Image from 'next/image';
 
@@ -19,10 +20,16 @@ const AdaenceLandingPage = () => {
     });
   };
 
-  const handleSearch = () => {
-    console.log('Recherche lancée avec:', formData);
-    // Nav ou requête API
-  };
+const router = useRouter();
+
+const handleSearch = () => {
+  const queryParams = new URLSearchParams({
+    moment: formData.momentPartage.trim(),
+    location: formData.localisation.trim()
+  });
+
+  router.push(`/visites?${queryParams.toString()}`);
+};
 
   const handleViewAllProfiles = () => {
     console.log('Voir tous les profils');

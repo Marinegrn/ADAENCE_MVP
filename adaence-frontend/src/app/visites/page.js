@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Search, MapPin } from 'lucide-react';
 import ReservationModal from '@/components/ReservationModal';
@@ -14,6 +15,18 @@ const AdaenceVisitPage = () => {
   const [activities, setActivities] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const profilesPerPage = 4;
+
+// Pré-remplissage des filtres sur la page "Je rends visite"
+const searchParams = useSearchParams();
+
+useEffect(() => {
+  const momentFromUrl = searchParams.get('moment');
+  const locationFromUrl = searchParams.get('location');
+
+  if (momentFromUrl) setSelectedMoment(momentFromUrl.toLowerCase());
+  if (locationFromUrl) setLocation(locationFromUrl);
+}, [searchParams]); // vient de userSearchParams()
+
 
 // Réinitialiser la page à 1 quand on change les filtres
 useEffect(() => {
