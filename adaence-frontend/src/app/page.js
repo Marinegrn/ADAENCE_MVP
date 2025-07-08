@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { Search, Edit, Share2, Heart, Facebook, Instagram, Youtube, Twitter } from 'lucide-react';
@@ -140,6 +141,7 @@ const AdaenceLandingPage = () => {
             ))}
           </div>
           
+          <Link href="/visites">
           <button
             onClick={handleViewAllProfiles}
             className="bg-gray-800 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition-colors"
@@ -147,6 +149,7 @@ const AdaenceLandingPage = () => {
           >
             Voir tous les profils
           </button>
+          </Link>
         </div>
       </section>
 
