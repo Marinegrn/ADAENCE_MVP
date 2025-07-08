@@ -12,6 +12,14 @@ const AdaenceVisitPage = () => {
   const [loading, setLoading] = useState(true);
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [activities, setActivities] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const profilesPerPage = 4;
+
+// Réinitialiser la page à 1 quand on change les filtres
+useEffect(() => {
+    setCurrentPage(1);
+}, [selectedMoment, location]);
+
 
   // Récupération des profils aînés depuis API Next.js (proxy)
   useEffect(() => {
@@ -52,8 +60,7 @@ useEffect(() => {
 }, []);
 
 
-
-  // Filtres appliqués par ville et/ou activités
+// Filtres appliqués par ville et/ou activités
 const filteredProfiles = profiles.filter((profile) => {
   const matchLocation =
     location.trim() === '' || profile.location.toLowerCase().includes(location.toLowerCase());
@@ -67,6 +74,13 @@ const filteredProfiles = profiles.filter((profile) => {
 
   return matchLocation && matchActivity;
 });
+
+// BUG - Le bloc doit être juste après le filtrage
+const totalPages = Math.ceil(filteredProfiles.length / profilesPerPage);
+const paginatedProfiles = filteredProfiles.slice(
+  (currentPage - 1) * profilesPerPage,
+  currentPage * profilesPerPage
+);
 
 const getImageUrl = (photo) => {
     if (!photo) return 'http://localhost:5000/public/images/seniors/default.jpg';
@@ -142,18 +156,16 @@ const ProfileCard = ({ profile, onClick }) => (
   return (
     <div className="min-h-screen bg-gray-50" lang="fr">
       <main className="container mx-auto px-4 py-8">
-        <section className="bg-white rounded-lg shadow-sm p-6 mb-8" aria-labelledby="filtrer-rencontres">
-          <h2 id="filtrer-rencontres" className="sr-only">Filtres de recherche</h2>
-          <form className="grid md:grid-cols-3 gap-4" role="search" aria-label="Filtrer les profils">
+        {/* Filtres */}
+        <section className="bg-white rounded-lg shadow-sm p-6 mb-8">
+          <form className="grid md:grid-cols-3 gap-4" role="search">
             <div>
               <label htmlFor="moment" className="block text-sm font-medium text-gray-700 mb-2">
                 Moment à partager
               </label>
-              
-              {/*filtrage des activités*/}
               <select
                 id="moment"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-900"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2"
                 value={selectedMoment}
                 onChange={(e) => setSelectedMoment(e.target.value)}
               >
@@ -161,10 +173,9 @@ const ProfileCard = ({ profile, onClick }) => (
                 {activities.map((activity) => (
                   <option key={activity.id} value={activity.name.toLowerCase()}>
                     {activity.name}
-                </option>
+                  </option>
                 ))}
               </select>
-
             </div>
             <div>
               <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
@@ -174,21 +185,12 @@ const ProfileCard = ({ profile, onClick }) => (
                 id="location"
                 type="text"
                 placeholder="Votre ville"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-900"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
               />
             </div>
-            <div className="flex items-end">
-              {/* <button // plus besoin car real-time / Live filtering
-                type="submit"
-                className="w-full bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center"
-                aria-label="Rechercher des moments disponibles"
-              >
-                <Search className="w-4 h-4 mr-2" />
-                Rechercher
-              </button> */}
-            </div>
+            <div className="flex items-end"></div>
           </form>
           <p className="mt-4 text-sm text-gray-600" aria-live="polite">
             <strong>{filteredProfiles.length}</strong> moment(s) trouvé(s)
@@ -199,25 +201,49 @@ const ProfileCard = ({ profile, onClick }) => (
                 setSelectedMoment('tous');
                 setLocation('');
               }}
-              aria-label="Réinitialiser les filtres"
             >
               Réinitialiser les filtres
             </button>
           </p>
         </section>
 
-        <section className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" aria-label="Liste des profils disponibles">
+        {/* Profils */}
+        <section className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {loading ? (
             <p>Chargement des profils...</p>
-          ) : filteredProfiles.length === 0 ? (
+          ) : paginatedProfiles.length === 0 ? (
             <p>Aucun profil trouvé pour ces critères.</p>
           ) : (
-            filteredProfiles.map((profile) => (
+            paginatedProfiles.map((profile) => (
               <ProfileCard key={profile.id} profile={profile} onClick={setSelectedProfile} />
             ))
           )}
         </section>
 
+        {/* Pagination */}
+        {filteredProfiles.length > profilesPerPage && (
+          <div className="flex justify-center items-center gap-4 mb-8">
+            <button
+              className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 disabled:opacity-50"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              Précédent
+            </button>
+            <span className="text-gray-700">
+              Page {currentPage} sur {totalPages}
+            </span>
+            <button
+              className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 disabled:opacity-50"
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            >
+              Suivant
+            </button>
+          </div>
+        )}
+
+        {/* Modal */}
         {selectedProfile && (
           <ReservationModal
             profile={selectedProfile}
