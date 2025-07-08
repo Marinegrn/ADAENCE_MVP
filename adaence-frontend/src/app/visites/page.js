@@ -32,14 +32,20 @@ const AdaenceVisitPage = () => {
     fetchProfiles();
   }, []);
 
-  // Filtres appliqués
-  const filteredProfiles = profiles.filter((profile) => {
-    const matchMoment =
-      selectedMoment === 'tous' || profile.type.toLowerCase().includes(selectedMoment);
-    const matchLocation =
-      location.trim() === '' || profile.location.toLowerCase().includes(location.toLowerCase());
-    return matchMoment && matchLocation;
-  });
+  // Filtres appliqués par ville et/ou activités
+const filteredProfiles = profiles.filter((profile) => {
+  const matchLocation =
+    location.trim() === '' || profile.location.toLowerCase().includes(location.toLowerCase());
+
+  const matchActivity =
+    selectedMoment === 'tous' ||
+    (profile.activities &&
+      profile.activities.some((activity) =>
+        activity.name.toLowerCase().includes(selectedMoment)
+      ));
+
+  return matchLocation && matchActivity;
+});
 
 const getImageUrl = (photo) => {
     if (!photo) return 'http://localhost:5000/public/images/seniors/default.jpg';
