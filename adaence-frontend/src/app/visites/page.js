@@ -56,6 +56,7 @@ const ProfileCard = ({ profile, onClick }) => (
         sizes="(max-width: 768px) 100vw, 33vw"
       />
     </div>
+
     <div className="p-4">
       <header className="mb-2">
         <span className="text-sm text-gray-600">{profile.type}</span>
@@ -70,7 +71,19 @@ const ProfileCard = ({ profile, onClick }) => (
           {profile.location}
         </p>
       </div>
-      <p className="text-sm text-gray-700 mb-4 line-clamp-3">{profile.description}</p>
+      <p className="text-sm text-gray-700 mb-4 line-clamp-3">{profile.bio}</p>
+      
+      {/*badges avec les activités préférées */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        {profile.activities?.map((activity, index) => (
+          <span
+            key={index}
+            className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full"
+          >
+            {activity}
+          </span>
+        ))}
+      </div>
       <button
         className="w-full bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors"
         aria-label={`Programmer un moment avec ${profile.user.firstName} ${profile.user.lastName}`}
