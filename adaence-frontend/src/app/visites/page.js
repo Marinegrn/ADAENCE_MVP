@@ -64,6 +64,7 @@ const ProfileCard = ({ profile, onClick }) => (
           {profile.user.firstName} {profile.user.lastName}
         </h3>
       </header>
+
       <div className="text-sm text-gray-600 mb-2">
         <p>{profile.profession} • {profile.age} ans</p>
         <p className="flex items-center" aria-label="Localisation">
@@ -71,19 +72,23 @@ const ProfileCard = ({ profile, onClick }) => (
           {profile.location}
         </p>
       </div>
+
       <p className="text-sm text-gray-700 mb-4 line-clamp-3">{profile.bio}</p>
-      
-      {/*badges avec les activités préférées */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        {profile.activities?.map((activity, index) => (
-          <span
-            key={index}
-            className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full"
-          >
-            {activity}
-          </span>
-        ))}
-      </div>
+
+      {/* Affichage des activités préférées */}
+      {profile.activities?.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-4">
+          {profile.activities.map((activity) => (
+            <span
+              key={activity.id}
+              className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full"
+            >
+              {activity.name}
+            </span>
+          ))}
+        </div>
+      )}
+
       <button
         className="w-full bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors"
         aria-label={`Programmer un moment avec ${profile.user.firstName} ${profile.user.lastName}`}
@@ -93,6 +98,7 @@ const ProfileCard = ({ profile, onClick }) => (
     </div>
   </article>
 );
+
 
   return (
     <div className="min-h-screen bg-gray-50" lang="fr">

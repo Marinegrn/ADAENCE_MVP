@@ -2,7 +2,10 @@ const prisma = require('../prisma/client');
 
 exports.getAllSeniors = async (req, res) => {
   const seniors = await prisma.seniorProfile.findMany({
-    include: { user: true },
+    include: { 
+      user: true, 
+      activities: true, // fondamental pour afficher les activités en front
+    },
   });
   res.json(seniors);
 };
