@@ -11,8 +11,9 @@ const AdaenceVisitPage = () => {
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProfile, setSelectedProfile] = useState(null);
+  const [activities, setActivities] = useState([]);
 
-  // Récupération des profils depuis API Next.js (proxy)
+  // Récupération des profils aînés depuis API Next.js (proxy)
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
@@ -31,6 +32,26 @@ const AdaenceVisitPage = () => {
 
     fetchProfiles();
   }, []);
+
+// Récupération depuis le proxy pour un affichage/filtrage en dynamique
+useEffect(() => {
+  const fetchActivities = async () => {
+    try {
+      const res = await fetch('/api/activities');
+      if (!res.ok) throw new Error('Erreur côté proxy activities');
+      const data = await res.json();
+      console.log('Activités chargées :', data);
+      setActivities(data);
+    } catch (error) {
+      console.error('Erreur chargement activités:', error);
+      setActivities([]);
+    }
+  };
+
+  fetchActivities();
+}, []);
+
+
 
   // Filtres appliqués par ville et/ou activités
 const filteredProfiles = profiles.filter((profile) => {
@@ -128,6 +149,8 @@ const ProfileCard = ({ profile, onClick }) => (
               <label htmlFor="moment" className="block text-sm font-medium text-gray-700 mb-2">
                 Moment à partager
               </label>
+              
+              {/*filtrage des activités*/}
               <select
                 id="moment"
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-900"
@@ -135,15 +158,13 @@ const ProfileCard = ({ profile, onClick }) => (
                 onChange={(e) => setSelectedMoment(e.target.value)}
               >
                 <option value="tous">Tous les moments possibles</option>
-                <option value="culturel">Sortie culturelle</option>
-                <option value="nature">Balade en nature</option>
-                <option value="café">Café discussion</option>
-                <option value="créatif">Activité créative</option>
-                <option value="jeux">Jeux de société</option>
-                <option value="musique">Musique</option>
-                <option value="cuisine">Cuisine</option>
-                <option value="lecture">Lecture</option>
+                {activities.map((activity) => (
+                  <option key={activity.id} value={activity.name.toLowerCase()}>
+                    {activity.name}
+                </option>
+                ))}
               </select>
+
             </div>
             <div>
               <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
