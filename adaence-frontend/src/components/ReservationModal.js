@@ -79,20 +79,22 @@ const ReservationModal = ({ profile, onClose }) => {
     if (!canSubmit) return;
 
     // Construction du payload (données envoyées d'une requête) aligné avec le backend
-    const payload = {
-      visitorEmail: volunteerInfo.email,
-      volunteerName: volunteerInfo.name,
-      volunteerPhone: volunteerInfo.phone,
-      message: volunteerInfo.message,
-      slotId: selectedTimeSlot.id,
-      profileId: profile.id,
-    };
+   const payload = {
+    visitorEmail: volunteerInfo.email,
+    volunteerName: volunteerInfo.name,
+    volunteerPhone: volunteerInfo.phone,
+    slotId: selectedTimeSlot.id,
+    profileId: profile.id, // seniorId
+    message: volunteerInfo.message,
+    activity: selectedActivity,
+    date: selectedDate
+};
 
     try {
       const res = await fetch('/api/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({payload}), // envoi du payload sans les champs optionnels
+        body: JSON.stringify(payload), // envoi du payload sans les champs optionnels
       });
 
       if (!res.ok) throw new Error('Erreur lors de la réservation');
