@@ -90,14 +90,29 @@ const ReservationModal = ({ profile, onClose }) => {
     date: selectedDate
 };
 
+// Log du payload pour debugging
+  console.log('Payload envoyé:', JSON.stringify(payload, null, 2));
+
     try {
       const res = await fetch('/api/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload), // envoi du payload sans les champs optionnels
+        body: JSON.stringify((payload)), // envoi du payload sans les champs optionnels
       });
 
-      if (!res.ok) throw new Error('Erreur lors de la réservation');
+    // Log de la réponse pour debugging
+    console.log('Status de la réponse:', res.status);
+    console.log('Headers de la réponse:', res.headers);
+
+    if (!res.ok) {
+      // Récupérer le message d'erreur du serveur
+      const errorData = await res.json().catch(() => ({ message: 'Erreur inconnue' }));
+      console.error('Erreur du serveur:', errorData);
+      throw new Error(errorData.message || `Erreur HTTP: ${res.status}`);
+    }
+    
+    const responseData = await res.json();
+    console.log('Réponse du serveur:', responseData);
       
       // Animation de succès
       setStep(5);
@@ -108,6 +123,20 @@ const ReservationModal = ({ profile, onClose }) => {
       console.error('Erreur réservation:', err);
       alert('Erreur lors de la réservation, veuillez réessayer.');
     }
+
+    // Afficher une erreur plus détaillée
+    let errorMessage = 'Erreur lors de la réservation, veuillez réessayer.';
+    
+    if (err.message.includes('HTTP: 500')) {
+      errorMessage = 'Erreur serveur. Veuillez contacter le support si le problème persiste.';
+    } else if (err.message.includes('HTTP: 400')) {
+      errorMessage = 'Données invalides. Vérifiez vos informations et réessayez.';
+    } else if (err.message !== 'Erreur inconnue') {
+      errorMessage = err.message;
+    }
+    
+    alert(errorMessage);
+
   };
 
   const getStepTitle = () => {
