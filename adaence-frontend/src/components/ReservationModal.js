@@ -74,70 +74,86 @@ const ReservationModal = ({ profile, onClose }) => {
     }, 150);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!canSubmit) return;
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!canSubmit) return;
 
-    // Construction du payload (données envoyées d'une requête) aligné avec le backend
-   const payload = {
-    visitorEmail: volunteerInfo.email,
-    volunteerName: volunteerInfo.name,
-    volunteerPhone: volunteerInfo.phone,
+  // Validation préliminaire
+  if (!selectedTimeSlot?.id) {
+    alert('Veuillez sélectionner un créneau horaire');
+    return;
+  }
+
+  if (!profile?.id) {
+    alert('Profil invalide');
+    return;
+  }
+
+  // Construction du payload (données envoyées d'une requête) aligné avec le backend
+  const payload = {
+    visitorEmail: volunteerInfo.email.trim(),
+    volunteerName: volunteerInfo.name.trim(),
+    volunteerPhone: volunteerInfo.phone.trim() || null,
     slotId: selectedTimeSlot.id,
     profileId: profile.id, // seniorId
-    message: volunteerInfo.message,
+    message: volunteerInfo.message.trim() || null,
     activity: selectedActivity,
     date: selectedDate
-};
+  };
 
-// Log du payload pour debugging
-  console.log('Payload envoyé:', JSON.stringify(payload, null, 2));
+  // Log du payload pour debugging
+  console.log('🚀 Payload envoyé:', JSON.stringify(payload, null, 2));
 
-    try {
-      const res = await fetch('/api/bookings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify((payload)), // envoi du payload sans les champs optionnels
-      });
+  try {
+    const res = await fetch('/api/bookings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
 
     // Log de la réponse pour debugging
-    console.log('Status de la réponse:', res.status);
-    console.log('Headers de la réponse:', res.headers);
+    console.log('📡 Status de la réponse:', res.status);
+    console.log('📡 Headers de la réponse:', Object.fromEntries(res.headers.entries()));
 
     if (!res.ok) {
       // Récupérer le message d'erreur du serveur
-      const errorData = await res.json().catch(() => ({ message: 'Erreur inconnue' }));
-      console.error('Erreur du serveur:', errorData);
+      const errorData = await res.json().catch(() => ({ 
+        message: 'Erreur de communication avec le serveur' 
+      }));
+      
+      console.error('❌ Erreur du serveur:', errorData);
+      
+      // Afficher l'erreur exacte du backend
       throw new Error(errorData.message || `Erreur HTTP: ${res.status}`);
     }
     
     const responseData = await res.json();
-    console.log('Réponse du serveur:', responseData);
-      
-      // Animation de succès
-      setStep(5);
-      setTimeout(() => {
-        onClose();
-      }, 2000);
-    } catch (err) {
-      console.error('Erreur réservation:', err);
-      alert('Erreur lors de la réservation, veuillez réessayer.');
-    }
-
+    console.log('✅ Réponse du serveur:', responseData);
+    
+    // Animation de succès
+    setStep(5);
+    setTimeout(() => {
+      onClose();
+    }, 2000);
+  } catch (err) {
+    console.error('❌ Erreur réservation complète:', err);
+    
     // Afficher une erreur plus détaillée
     let errorMessage = 'Erreur lors de la réservation, veuillez réessayer.';
     
-    if (err.message.includes('HTTP: 500')) {
-      errorMessage = 'Erreur serveur. Veuillez contacter le support si le problème persiste.';
-    } else if (err.message.includes('HTTP: 400')) {
-      errorMessage = 'Données invalides. Vérifiez vos informations et réessayez.';
-    } else if (err.message !== 'Erreur inconnue') {
+    if (err.message.includes('fetch')) {
+      errorMessage = 'Impossible de contacter le serveur. Vérifiez votre connexion internet.';
+    } else if (err.message.includes('backend')) {
+      errorMessage = 'Erreur du serveur backend. Veuillez réessayer plus tard.';
+    } else if (err.message.includes('Champs requis')) {
+      errorMessage = 'Veuillez remplir tous les champs obligatoires.';
+    } else if (err.message && err.message !== 'Erreur de communication avec le serveur') {
       errorMessage = err.message;
     }
     
     alert(errorMessage);
-
-  };
+  }
+};
 
   const getStepTitle = () => {
     switch (step) {
