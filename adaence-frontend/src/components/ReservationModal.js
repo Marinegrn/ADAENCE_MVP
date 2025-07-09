@@ -242,8 +242,8 @@ const ReservationModal = ({ profile, onClose }) => {
                         type="button"
                         className={`p-3 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${
                           selectedTimeSlot?.id === slot.id
-                            ? 'border-orange-400 bg-orange-50 text-orange-700'
-                            : 'border-gray-200 hover:border-orange-300 hover:bg-orange-50/50'
+                            ? 'border-orange-400 bg-orange-50 text-cyan-900'
+                            : 'text-gray-400 border-gray-200 hover:border-orange-300 hover:bg-orange-50/50'
                         }`}
                         onClick={() => setSelectedTimeSlot(slot)}
                       >
