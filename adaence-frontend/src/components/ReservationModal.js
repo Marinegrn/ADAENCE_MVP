@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import { X, Calendar, Clock, User, Mail, Phone, MessageCircle, ChevronRight, ChevronLeft, Heart } from 'lucide-react';
 
@@ -77,21 +78,23 @@ const ReservationModal = ({ profile, onClose }) => {
     e.preventDefault();
     if (!canSubmit) return;
 
+    // Construction du payload (données envoyées d'une requête) aligné avec le backend
+    const payload = {
+      visitorEmail: volunteerInfo.email,
+      volunteerName: volunteerInfo.name,
+      volunteerPhone: volunteerInfo.phone,
+      message: volunteerInfo.message,
+      slotId: selectedTimeSlot.id,
+      profileId: profile.id,
+    };
+
     try {
       const res = await fetch('/api/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          visitorEmail: volunteerInfo.email,
-          slotId: selectedTimeSlot.id,
-          message: volunteerInfo.message,
-          activity: selectedActivity,
-          date: selectedDate,
-          volunteerName: volunteerInfo.name,
-          volunteerPhone: volunteerInfo.phone,
-          profileId: profile.id,
-        }),
+        body: JSON.stringify({payload}), // envoi du payload sans les champs optionnels
       });
+
       if (!res.ok) throw new Error('Erreur lors de la réservation');
       
       // Animation de succès
@@ -131,16 +134,25 @@ const ReservationModal = ({ profile, onClose }) => {
           </button>
 
           <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full overflow-hidden bg-white/20 border-2 border-white flex items-center justify-center">
+              {profile.photo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={profile.photo}
+                alt="Photo de profil"
+                className="w-full h-full object-cover"
+              />
+            ) : (
               <Heart className="w-8 h-8 text-white" />
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold">
-                {profile.user ? `${profile.user.firstName} ${profile.user.lastName}` : 'Cette personne'}
-              </h2>
-              <p className="text-white/80 text-sm">Prêt.e à partager un moment avec vous</p>
-            </div>
+            )}
           </div>
+          <div>
+            <h2 className="text-2xl font-bold">
+              {profile.user ? `${profile.user.firstName} ${profile.user.lastName}` : 'Cette personne'}
+            </h2>
+              <p className="text-white/80 text-sm">Prêt.e à partager un moment avec vous</p>
+          </div>
+      </div>
 
           {/* Progress bar */}
           <div className="mt-6 bg-white/20 rounded-full h-1 overflow-hidden">
