@@ -138,7 +138,7 @@ const ReservationModal = ({ profile, onClose }) => {
               {profile.photo ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={profile.photo}
+                src={`/assets/${profile.photo}`} // bug d'affichage de modal -> mettre le chemin complet du stockage de la photo
                 alt="Photo de profil"
                 className="w-full h-full object-cover"
               />
@@ -174,7 +174,7 @@ const ReservationModal = ({ profile, onClose }) => {
             {/* Étape 1 : Activité */}
             {step === 1 && (
               <div className="space-y-4">
-                <p className="text-gray-600 text-center mb-8">Choisissez l&apos;activité que vous aimeriez partager ensemble</p>
+                <p className="text-gray-600 text-center mb-8">Choisissez l&apos;activité que vous aimeriez partager ensemble.</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {activities.length === 0 ? (
                     <p className="col-span-2 text-center text-gray-500">Aucune activité disponible</p>
@@ -212,7 +212,7 @@ const ReservationModal = ({ profile, onClose }) => {
                 <div className="max-w-xs mx-auto">
                   <input
                     type="date"
-                    className="w-full border-2 border-gray-200 rounded-2xl px-4 py-3 focus:outline-none focus:border-orange-400 transition-colors duration-200 text-center text-lg"
+                    className="w-full border-2 text-gray-800 border-gray-200 rounded-2xl px-4 py-3 focus:outline-none focus:border-orange-400 transition-colors duration-200 text-center text-lg"
                     value={selectedDate}
                     min={new Date().toISOString().split('T')[0]}
                     onChange={e => setSelectedDate(e.target.value)}
